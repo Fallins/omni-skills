@@ -1,0 +1,8 @@
+This project adapts skills originally published in:
+
+  https://github.com/mattpocock/skills
+
+Upstream license: see LICENSE.upstream (MIT, Copyright (c) 2026 Matt Pocock).
+
+Adaptations for Cursor (naming, Traditional Chinese UX, install layout, Cursor Task tooling)
+are maintained in this repository.

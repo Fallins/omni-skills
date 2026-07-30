@@ -1,0 +1,9 @@
+# Domain glossary
+
+<!-- 專案共用語言。只放領域詞彙，不放實作細節。由 /bl-grill-with-docs 與 /bl-domain-modeling 維護。 -->
+
+## Terms
+
+| Term | Definition |
+|------|------------|
+| （範例）Statement import | 上傳信用卡對帳單 PDF、預覽確認後寫入卡費帳單與明細的流程 |
