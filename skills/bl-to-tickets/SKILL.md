@@ -34,6 +34,7 @@ disable-model-invocation: true
 - 完成後可 demo 或可驗證
 - 體積約一個乾淨 context window
 - Prefactor 排在前面
+- **核心票**附 Behavior matrix（見下方模板）；確認清單時一併展示有無 matrix
 
 每張票標明 **Blocked by**（無則可立即開始）。
 
@@ -61,9 +62,33 @@ Local 檔模板：
 
 **Status:** ready-for-agent
 
-- [ ] Acceptance criterion 1
+## Parent
+
+`<path-to-spec.md>`
+
+## What to build
+
+（可稍長：本切片範圍與依賴邊界）
+
+## Behavior matrix（驗收用）
+
+| 條件 | 預期行為 |
+|------|----------|
+| … | … |
+| … | … |
+
+## Acceptance criteria
+
+- [ ] Behavior matrix 可驗證（測試或手動）
 - [ ] Acceptance criterion 2
 ```
+
+**Behavior matrix（必填於核心票）：**
+
+- 主路徑／會寫入資料／權限邊界的票（可標 P0）必須有 **5～10 列**「條件 → 預期行為」
+- 寫可觀測結果（錯誤提示、DB／UI 可見狀態、允許／拒絕），**不要**寫檔案路徑或實作步驟
+- 純文件／chore／機械重構票可省略 matrix，或只留 2～3 列
+- Acceptance 可對齊 matrix，避免重複敘述三遍
 
 避免易過期的具體路徑／大段程式碼（prototype 決策片段除外）。
 
