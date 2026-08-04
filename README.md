@@ -21,11 +21,18 @@ chmod +x scripts/install-to-cursor.sh
 ```
 /bl-setup                 # 每個專案一次：tracker + domain docs 設定
   → /bl-grill-with-docs   # 對齊需求，維護 CONTEXT／ADR
-  → /bl-to-spec           # 收成 spec
+  → /bl-to-spec           # 收成 spec（寫入 agent-work）
   → /bl-to-tickets        # 拆 tracer-bullet tickets
   → /bl-implement         # TDD 實作，收尾 code-review
   → （確認後再 commit）
 ```
+
+**一律進 agent-work**：`~/Documents/Git/agent-work/<repo名>/`（spec／tickets／CONTEXT／ADR／`issue-tracker.md`）。  
+**不在業務 repo 留任何檔或指標**（無 `.scratch/`、無 `docs/agents/`）。  
+Setup 完成條件：存在 `agent-work/<repo>/issue-tracker.md`。  
+約定見 [`docs/agent-work-and-setup.md`](docs/agent-work-and-setup.md)。
+
+若尚未 setup：`/bl-to-spec` 等會提示 **`/bl-setup`**（或「幫我 setup」），完成前不寫入；查找一律到 agent-work。
 
 其他：
 

@@ -17,7 +17,7 @@ disable-model-invocation: true
 1. 用 Read 讀取並遵循 `~/.cursor/skills/bl-grilling/SKILL.md`。
 2. 用 Read 讀取並遵循 `~/.cursor/skills/bl-domain-modeling/SKILL.md`。
 3. 在 grilling 過程中同步維護領域詞彙（`CONTEXT.md`）與必要的 ADR。
-4. 若專案尚無 `docs/agents/issue-tracker.md`，提醒使用者先跑 `/bl-setup`（可繼續 grilling，但之後 to-spec／to-tickets 需要設定）。
+4. 若尚無 `AW/issue-tracker.md`（`AW=~/Documents/Git/agent-work/<repo名>`），**提示**執行 **`/bl-setup`**（或「幫我 setup」）；可繼續 grilling，但 CONTEXT／ADR **寫入 `AW/`**，且之後 `/bl-to-spec`／`/bl-to-tickets` 會被閘門擋住直到 setup 完成。細節見套件 `docs/agent-work-and-setup.md`。
 
 ## 結束時
 

@@ -19,7 +19,7 @@ disable-model-invocation: true
 
 兩軸用 **平行 Task subagent**（`subagent_type: generalPurpose`）執行，避免互相汙染，再由你彙總。
 
-若缺 `docs/agents/issue-tracker.md`，spec 來源改問使用者或掃 `.scratch/`／`docs/`。
+若缺 `AW/issue-tracker.md`（`AW=~/Documents/Git/agent-work/<repo名>`），先 Read 套件 `docs/agent-work-and-setup.md` 並執行 **缺 setup 閘門**（提示 `/bl-setup` 或「幫我 setup」）。spec 來源：問使用者或掃 `AW/`（**不要**猜業務 repo `.scratch`／`docs/agents/`）。
 
 ## 流程
 
@@ -33,9 +33,9 @@ disable-model-invocation: true
 
 ### 2. Spec 來源（順序）
 
-1. Commit message 的 issue 引用 → 依 `docs/agents/issue-tracker.md` 讀取
+1. Commit message 的 issue 引用 → 依 `AW/issue-tracker.md` 在 agent-work 讀取
 2. 使用者傳入路徑
-3. `docs/`、`specs/`、`.scratch/` 下吻合分支／功能的 spec
+3. 掃 `AW/<feature>/spec.md`（及 `AW/` 下吻合分支／功能的 spec）
 4. 找不到就問；使用者說沒有 → Spec 軸略過並註明
 
 ### 3. Standards 來源

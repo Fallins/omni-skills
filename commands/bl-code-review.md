@@ -1,7 +1,3 @@
----
-description: 執行 bl-code-review（繁中工程流程）
----
+Follow `~/.cursor/skills/bl-code-review/SKILL.md`.
 
-讀取並嚴格遵循個人 skill：`~/.cursor/skills/bl-code-review/SKILL.md`。
-
-與使用者對話使用繁體中文。完成後依該 skill「下一步建議」提示後續命令。
+若缺 tracker 設定：依 skill 提示 `/bl-setup`；spec 來源掃 agent-work，不要預設業務 repo `.scratch`／`docs/agents/`。

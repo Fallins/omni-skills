@@ -12,80 +12,66 @@ disable-model-invocation: true
 
 與使用者對話一律使用**繁體中文**。寫入的設定檔可用繁中或英文。
 
-為本 repo 建立工程 skills 需要的設定：
+為**當前業務 repo** 在 **agent-work** 建立工作區（規格／tickets／CONTEXT／ADR）。  
+**不在業務 git repo 內寫任何檔**（含 `docs/agents/` 指標、`.scratch/`、根 `CONTEXT.md`）。
 
-- **Issue tracker** — issues／specs 放哪裡（預設推薦：**本機 markdown**）
-- **Domain docs** — `CONTEXT.md` 與 ADR 的 layout
-
-這是提示驅動流程：探索 → 呈現 → 確認 → 寫入。本套件**未**附 `triage` skill，略過 triage 標籤區塊。
+先 Read：`/Users/user/Documents/Git/Personal/cursor-agent-kit/docs/agent-work-and-setup.md`
 
 ## 流程
 
 ### 1. 探索
 
-- `git remote -v`
-- 根目錄 `AGENTS.md`／`CLAUDE.md`
-- `CONTEXT.md`／`CONTEXT-MAP.md`、`docs/adr/`、`docs/agents/`、`.scratch/`
-- monorepo 訊號（workspaces 等）
+- `git rev-parse --show-toplevel` → `repo名`
+- `AW=~/Documents/Git/agent-work/<repo名>`
+- 是否已有 `AW/issue-tracker.md`（若有，告知已 setup，詢問是否覆寫／更新）
 
 ### 2. 詢問（一次一題，附推薦答案）
 
-**A — Issue tracker**（推薦：**Local markdown**，適合個人與多數 side project）
+**A — Issue tracker**（推薦：**Local → agent-work**）
 
-- Local markdown → `.scratch/<feature>/`
-- GitHub（`gh`）
-- GitLab（`glab`）
-- Other（請使用者用一段話描述；原樣寫入）
+- **Local markdown（agent-work）**（預設）
+- GitHub／GitLab／Other（自訂；若選 Local 以外，仍避免污染業務 repo，除非使用者堅持）
 
-寫入 `docs/agents/issue-tracker.md`。Local 範本可參考 kit 的 `templates/issue-tracker-local.md`（若已安裝，路徑也可能在 `~/.cursor/skills/../` 的 kit repo；或依下方「Local 精簡範本」撰寫）。
+**B — Domain docs**
 
-**B — Domain docs**：無 monorepo 訊號則直接採用 **single-context**（根 `CONTEXT.md` + `docs/adr/`），不必多問。有 monorepo 才問是否 multi-context。
-
-寫入 `docs/agents/domain.md`（可從 kit `templates/domain.md` 改編）。
+- 無 monorepo 訊號 → 直接 **single-context**：`AW/CONTEXT.md` + `AW/docs/adr/`
+- 有 monorepo → 問 single vs multi（文件仍只在 `AW/`）
 
 ### 3. 確認草稿
 
-展示即將寫入的 `docs/agents/*.md` 與（若會改）`AGENTS.md`／`CLAUDE.md` 的 `## Agent skills` 區塊，讓使用者改完再寫。
+展示即將建立／覆寫的路徑（僅 `AW/` 下），例如：
 
-### 4. 寫入
+- `AW/README.md`
+- `AW/issue-tracker.md`（自 `templates/issue-tracker-local.md` 填入 repo 名）
+- `AW/domain.md`（自 `templates/domain.md`）
 
-- 已有 `CLAUDE.md` → 編它；否則已有 `AGENTS.md` → 編它；都沒有 → 問要建哪一個。
-- 已有 `## Agent skills` 則就地更新，勿重複附加。
+**明確說明：不會修改業務 repo 內任何檔案。**
 
-區塊範例：
+### 4. 寫入（只寫 AW）
 
-```markdown
-## Agent skills
+1. `mkdir -p AW/docs/adr`
+2. 寫入／更新上述 markdown
+3. `CONTEXT.md`／ADR **懶建立**（有內容再寫）；setup 不強制建空 CONTEXT
 
-### Issue tracker
-
-[一句話]. See `docs/agents/issue-tracker.md`.
-
-### Domain docs
-
-[single-context 或 multi-context]. See `docs/agents/domain.md`.
-```
-
-### Local 精簡範本（issue-tracker.md）
+### Local issue-tracker 範例
 
 ```markdown
-# Issue tracker: Local Markdown
+# Issue tracker: Local Markdown（agent-work only）
 
-Issues and specs live under `.scratch/`.
+Project folder: `~/Documents/Git/agent-work/<repo名>/`
 
-- Spec: `.scratch/<feature-slug>/spec.md`
-- Tickets: `.scratch/<feature-slug>/issues/<NN>-<slug>.md` (from `01`)
-- Status line near top; comments under `## Comments`
+- Spec: `…/<feature-slug>/spec.md`
+- Tickets: `…/<feature-slug>/issues/<NN>-<slug>.md`
 ```
 
 ### 5. 完成
 
-告知設定完成；之後 `/bl-to-spec`、`/bl-to-tickets`、`/bl-implement`、`/bl-code-review` 會讀這些檔。可直接改 `docs/agents/*.md`；換 tracker 再跑本 skill。
+告知 `AW` 絕對路徑；之後 bl-* 以 `AW/issue-tracker.md` 是否存在判斷 setup，並**一律到 agent-work 查找** CONTEXT／ADR／spec。
 
 ## 結束時
 
 ```
 ### 下一步建議
-建議執行 `/bl-grill-with-docs`：對齊需求並維護 CONTEXT／ADR。
+建議執行 `/bl-grill-with-docs`：對齊需求並維護 CONTEXT／ADR（寫入 agent-work）。
 若題目已清楚：可直接 `/bl-to-spec`。
 ```

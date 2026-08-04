@@ -14,7 +14,9 @@ disable-model-invocation: true
 
 ## 前提
 
-讀取 `docs/agents/issue-tracker.md`；缺失則先 `/bl-setup`，或預設本機 markdown（見下）。
+1. Read 套件 `docs/agent-work-and-setup.md`。
+2. 執行 **缺 setup 閘門**：無 `AW/issue-tracker.md`（`AW=~/Documents/Git/agent-work/<repo名>`）則提示 **`/bl-setup`**（或「幫我 setup」），完成前不要寫 tickets。
+3. 讀取 `AW/issue-tracker.md`；Local 以該檔路徑為準。**查找** spec／CONTEXT／ADR 一律到 `AW/`。
 
 ## 流程
 
@@ -48,8 +50,8 @@ disable-model-invocation: true
 
 依 tracker：
 
-- **Local**：`.scratch/<feature>/issues/<NN>-<slug>.md`，從 `01`、依賴先寫；一票一檔。
-- **GitHub／其他**：依 `docs/agents/issue-tracker.md` 建立 issue，並寫 blocking 關係。
+- **Local（agent-work）**：`~/Documents/Git/agent-work/<repo>/<feature>/issues/<NN>-<slug>.md`，從 `01`、依賴先寫；一票一檔。
+- **GitHub／其他**：依 `AW/issue-tracker.md` 建立 issue，並寫 blocking 關係。
 
 Local 檔模板：
 

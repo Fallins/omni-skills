@@ -14,15 +14,19 @@ disable-model-invocation: true
 
 ## 前提
 
-讀取 `docs/agents/issue-tracker.md`（若缺失，先請使用者跑 `/bl-setup`，或暫用本機 `.scratch/<feature>/spec.md`）。
+1. Read 套件 `docs/agent-work-and-setup.md`（見該檔路徑說明）。
+2. 執行其中的 **缺 setup 閘門**：無 `AW/issue-tracker.md`（`AW=~/Documents/Git/agent-work/<repo名>`）則提示執行 **`/bl-setup`**（或「幫我 setup」代跑），**完成前不要寫 spec**。
+3. 讀取 `AW/issue-tracker.md`；Local 路徑以該檔為準。**查找** CONTEXT／ADR／既有 spec 時一律到 `AW/`，不要去業務 repo 根目錄或 `.scratch`。
 
 **不要再訪談**——只綜合對話與程式庫既有理解。
 
 ## 流程
 
-1. 若尚未探索 codebase，先探索。全文使用領域詞彙（有 `CONTEXT.md` 就讀）；遵守相關 ADR。
+1. 若尚未探索 codebase，先探索。全文使用領域詞彙（有 `AW/CONTEXT.md` 就讀）；遵守 `AW/docs/adr/` 相關 ADR。
 2. 草擬要測試的 **seams**（優先既有、越高層越好、越少越好）。與使用者確認 seams。
-3. 依下方模板寫 spec，並依 issue-tracker 設定發布（local：寫入 `.scratch/<feature>/spec.md`）。狀態標為 `ready-for-agent`（若 tracker 有此概念）。
+3. 依下方模板寫 spec，並依 issue-tracker 設定發布。Local 典型路徑：  
+   `~/Documents/Git/agent-work/<repo>/<feature>/spec.md`  
+   狀態標為 `ready-for-agent`（若 tracker 有此概念）。
 
 ## Spec 模板
 

@@ -16,28 +16,34 @@ disable-model-invocation: true
 
 在設計過程中主動打磨領域模型：挑戰用語、構想邊界情境，並在詞彙與決策一成形就寫進文件。（只讀 `CONTEXT.md` 查詞彙不算本 skill。）
 
-## 檔案結構
+## 檔案結構（一律 agent-work）
 
-多數 repo 單一 context：
+先 Read：套件 `docs/agent-work-and-setup.md`。
+
+`AW = ~/Documents/Git/agent-work/<git-repo-目錄名>/`
+
+單一 context（預設）：
 
 ```
-/
+AW/
 ├── CONTEXT.md
+├── CONTEXT-MAP.md   # 可選
 ├── docs/adr/
-└── src/
+├── domain.md        # setup 產生
+└── …
 ```
 
-若根目錄有 `CONTEXT-MAP.md`，表示多 context；依 map 指向各區 `CONTEXT.md`／ADR。
+**禁止**寫入業務 repo 根目錄的 `CONTEXT.md`／`docs/adr/`，也**不要**在業務 repo 留指標。
 
-懶建立：有東西要寫才建檔。第一個詞彙落地時建 `CONTEXT.md`；第一個 ADR 需要時建 `docs/adr/`。
+若 `AW/domain.md` 存在，遵守其中 layout；若 `AW/CONTEXT-MAP.md` 存在，依 map 指向各區文件（仍在 `AW/` 下）。
 
-若 `docs/agents/domain.md` 存在，遵守其中記載的 layout。
+懶建立：有東西要寫才建檔。第一個詞彙落地時建 `AW/CONTEXT.md`；第一個 ADR 需要時建 `AW/docs/adr/`。
 
 ## 會話中
 
 ### 對照詞彙表
 
-使用者用語與 `CONTEXT.md` 衝突時立刻指出並確認。
+使用者用語與 `AW/CONTEXT.md` 衝突時立刻指出並確認。
 
 ### 銳化模糊用語
 
@@ -53,13 +59,13 @@ disable-model-invocation: true
 
 ### 即時更新 CONTEXT.md
 
-詞彙一決議就更新；格式見同目錄 [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md)。
+詞彙一決議就更新到 **`AW/CONTEXT.md`**；格式見同目錄 [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md)。
 
 `CONTEXT.md` **禁止**實作細節——只做 glossary。
 
 ### ADR 從嚴
 
-僅在三者皆成立時提議 ADR：(1) 難回頭 (2) 沒脈絡會怪 (3) 真有取捨。格式見 [ADR-FORMAT.md](./ADR-FORMAT.md)。
+僅在三者皆成立時提議 ADR：(1) 難回頭 (2) 沒脈絡會怪 (3) 真有取捨。寫入 **`AW/docs/adr/`**。格式見 [ADR-FORMAT.md](./ADR-FORMAT.md)。
 
 ## 結束時
 

@@ -1,7 +1,3 @@
----
-description: 執行 bl-implement（繁中工程流程）
----
+Follow `~/.cursor/skills/bl-implement/SKILL.md`.
 
-讀取並嚴格遵循個人 skill：`~/.cursor/skills/bl-implement/SKILL.md`。
-
-與使用者對話使用繁體中文。完成後依該 skill「下一步建議」提示後續命令。
+開始前若無 `~/Documents/Git/agent-work/<repo>/issue-tracker.md`：依 skill 提示 `/bl-setup`（或「幫我 setup」）。查找一律到 agent-work。
