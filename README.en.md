@@ -1,6 +1,8 @@
 # omni-skills
 
-Cross-tool agent skills (Cursor / Codex / Claude / Antigravity). Skill bodies live only here. Task workspaces belong in the private [omni-agent-work](https://github.com/Fallins/omni-agent-work) repo. This repo does not hard-code home-directory paths.
+Cross-tool agent skills (Cursor / Codex / Claude / Antigravity). Skill bodies live only here. This repo does not hard-code home-directory paths.
+
+Give the agent a map first; load details only when needed. Architecture: [docs/agent-context-architecture.zh-TW.md](docs/agent-context-architecture.zh-TW.md) (Chinese, canonical).
 
 The older [Fallins/skills](https://github.com/Fallins/skills.git) snapshot is the same history; use this repo instead.
 
@@ -27,7 +29,7 @@ Agents should follow [INSTALL.md](INSTALL.md). Config is written to `~/.config/o
 
 | Name | Purpose | How to use |
 |------|---------|------------|
-| `enroll` | Agent-work concept: five layers, approach B, skeleton, enroll current git | Say "enroll" or `/enroll` |
+| `enroll` | Enroll the current git into agent-work (workspace folder + tracker). Does not modify company git. See [docs/agent-work.md](docs/agent-work.md) | Say "enroll" or `/enroll` |
 | `eli5` | Read-only HTML visual explanation of how code actually runs | "ELI5 this flow"; output in `.agent-artifacts/eli5/` |
 | `frontend-design` | New UI, substantial visual redesign or polish; typography, composition, hierarchy | `/frontend-design` |
 | `agent-browser` | Real-browser automation for QA, repro, screenshots, flow verification | `/agent-browser` (needs the CLI) |
@@ -57,4 +59,6 @@ Talk to the user in Traditional Chinese.
 
 ## License
 
-Upstream MIT: `LICENSE.upstream`, `NOTICE`. Adaptations: `LICENSE`.
+- `gs-*` upstream MIT: `LICENSE.upstream`.
+- Third-party skill licenses: `NOTICE` and each skill's `LICENSE.txt`.
+- Adaptations: `LICENSE`.

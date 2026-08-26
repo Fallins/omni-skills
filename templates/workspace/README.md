@@ -2,6 +2,8 @@
 
 本機工程工作區與私人 context。**不進各業務 git**，也不在業務 repo 留指標檔。
 
+概念（五層、做法 B）見公開庫 omni-skills 的 `docs/agent-work.md`。
+
 ## 查找路徑
 
 `repo` = `git rev-parse --show-toplevel` 的目錄名。

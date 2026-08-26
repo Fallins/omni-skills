@@ -18,7 +18,7 @@ disable-model-invocation: true
 
 先 Read 套件 `docs/agent-work-and-setup.md`（從本 SKILL.md 往上兩層）。用 `scripts/resolve-aw.sh` 解析 `AW`。
 
-完整納管（五層骨架 + 做法 B + 個人 AGENTS.md）請用 **`enroll`**。本 skill 只保證 `issue-tracker.md`。
+完整納管請用 **`enroll`**（概念見套件 `docs/agent-work.md`）。本 skill 只保證 `issue-tracker.md`。
 
 ## 流程
 

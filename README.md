@@ -1,6 +1,8 @@
 # omni-skills
 
-跨工具 skill 庫（Cursor／Codex／Claude／Antigravity）。Skill 正文只放這裡。工作區（公司 spec、任務檔）在私人庫 [omni-agent-work](https://github.com/Fallins/omni-agent-work)；本庫**不含**你家目錄路徑。
+跨工具 skill 庫（Cursor／Codex／Claude／Antigravity）。Skill 正文只放這裡。本庫**不含**你家目錄路徑。
+
+讓 Agent 先拿到地圖，需要時再讀細節。架構理念：[docs/agent-context-architecture.zh-TW.md](docs/agent-context-architecture.zh-TW.md)。
 
 舊的 [Fallins/skills](https://github.com/Fallins/skills.git) 是同一段歷史的 kit 快照，請改用本庫。
 
@@ -24,7 +26,7 @@ chmod +x scripts/install-skills.sh
 ## 推薦流程
 
 ```
-/enroll                   # 五層骨架 + 納管目前 git
+/enroll                   # 把目前 git 納管進 agent-work（概念見 docs/agent-work.md）
 /gs-setup                 # 若只要 tracker（enroll 已含）
   → /gs-grill-with-docs
   → /gs-to-spec
@@ -64,7 +66,7 @@ chmod +x scripts/install-skills.sh
 
 | 名稱 | 用途 | 怎麼用 |
 |------|------|--------|
-| `enroll` | 整套 agent-work 概念：五層、做法 B、骨架、納管目前 git | 說「納管」「enroll」或 `/enroll`。可被模型叫。 |
+| `enroll` | 把目前 git 納管進 agent-work：建專案工作區與 tracker。公司不改業務 git。概念：[docs/agent-work.md](docs/agent-work.md) | 說「納管」「enroll」或 `/enroll`。可被模型叫。 |
 | `eli5` | 用 HTML 視覺解釋現有程式怎麼跑（Confirmed／Inferred／Unknown） | 「ELI5 這個流程」；產出在**被解釋的專案** `.agent-artifacts/eli5/`。不要改 production code。 |
 | `frontend-design` | 新 UI、大型視覺調整、設計 polish；強調 typography、composition、hierarchy 與 distinctive design | `/frontend-design` 或「用 frontend-design 設計這個頁面」 |
 | `agent-browser` | 使用真實 browser 做操作、QA、repro、截圖與流程驗證 | `/agent-browser` 或「用 agent-browser 測這個登入流程」 |
@@ -146,4 +148,6 @@ skill 是 symlink，改檔即生效（新對話較穩）。
 
 ## 授權
 
-上游 MIT：`LICENSE.upstream` 與 `NOTICE`。本庫改編見 `LICENSE`。
+- `gs-*` 上游 MIT：`LICENSE.upstream`。
+- 其他第三方 skill 授權見 `NOTICE` 與各 skill 的 `LICENSE.txt`。
+- 本庫改編見 `LICENSE`。

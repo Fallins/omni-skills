@@ -5,6 +5,7 @@ description: >-
   with UI, fill forms, capture screenshots, reproduce browser bugs, perform
   exploratory QA, and verify actual browser behavior. Requires the external
   agent-browser CLI.
+license: Complete terms in LICENSE.txt
 ---
 
 # agent-browser
@@ -78,3 +79,9 @@ and element-reference workflow rather than guessing selectors or page state.
 
 After navigation or substantial page changes, refresh browser state before
 continuing interactions.
+
+---
+
+Adapted/wrapped for Fallins/omni-skills.
+Original skill: vercel-labs/agent-browser — agent-browser.
+Runtime workflow remains upstream CLI-served.

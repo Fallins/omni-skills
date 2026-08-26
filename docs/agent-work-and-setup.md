@@ -1,5 +1,7 @@
 # agent-work 布局 + 缺 setup 閘門
 
+概念（五層、做法 B、為什麼拆庫）見 [agent-work.md](agent-work.md)。本檔只寫查找路徑與缺 setup 閘門。
+
 `gs-*` 與 `enroll` 共用。Agent 請 Read 本檔（位於本套件 `docs/agent-work-and-setup.md`，從 skill 目錄往上兩層）。
 
 路徑**不要寫死家目錄**。一律讀 `~/.config/omni-skills/config.json`（可用環境變數 `OMNI_CONFIG` 覆寫）。腳本：`scripts/resolve-aw.sh`、`scripts/enroll-project.sh`。
