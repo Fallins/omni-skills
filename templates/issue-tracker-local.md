@@ -1,23 +1,19 @@
-# Issue tracker: Local Markdown（agent-work only）
+# Issue tracker: Local Markdown
 
-All specs and tickets for this business repo live under **agent-work**. Nothing is written into the business git tree (no `.scratch/`, no `docs/agents/` pointer).
+All specs and tickets for this repo live under the configured workspace (`AW`), not the business git tree (work-personal layout) or under `.scratch/` (scratch layout).
 
 ## This project
 
-- Agent-work root: `~/Documents/Git/agent-work`
-- Project folder: `~/Documents/Git/agent-work/<REPO_NAME>/`
-- Replace `<REPO_NAME>` with the business repo directory name.
+- Workspace root: `<WORKSPACE_ROOT>`
+- Project folder: `<WORKSPACE_ROOT>/<LANE>/<REPO_NAME>/` （scratch 時即 git 根下 `.scratch/<REPO_NAME>/`）
+
+Replace `<LANE>` with `work` or `personal`. Replace `<REPO_NAME>` with the git root directory name.
 
 ## Conventions
 
-- One feature per directory: `<project>/<feature-slug>/`
+- One feature per directory: `<feature-slug>/`
 - Spec: `<feature-slug>/spec.md`
 - Tickets: `<feature-slug>/issues/<NN>-<slug>.md` from `01`
-- `Status:` near top; comments under `## Comments`
-
-## Publish / fetch
-
-Create or read files only under this project folder in agent-work.
 
 ## Related domain docs（same tree）
 

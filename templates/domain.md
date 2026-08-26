@@ -1,10 +1,10 @@
 # Domain Docs（agent-work）
 
-How bl-* skills consume domain documentation. **All files live under agent-work**, not the business git repo.
+How gs-* skills consume domain documentation. **All files live under AW**, not the business git repo.
 
 ## Project folder
 
-`AW = ~/Documents/Git/agent-work/<git-repo-directory-name>/`
+`AW` 依 `docs/agent-work-and-setup.md`
 
 ## Before exploring, read these（from AW）
 
@@ -17,7 +17,7 @@ If these don’t exist yet, **proceed silently** (lazy create via domain-modelin
 ## File structure（single-context，預設）
 
 ```
-~/Documents/Git/agent-work/<repo>/
+AW/
 ├── README.md
 ├── issue-tracker.md
 ├── domain.md

@@ -1,0 +1,8 @@
+{
+  "commandPrefix": "",
+  "workspaceRoot": null,
+  "layout": "scratch",
+  "tools": ["cursor", "codex", "claude", "antigravity"],
+  "personalPathSubstring": "/Personal/",
+  "skillsSource": null
+}

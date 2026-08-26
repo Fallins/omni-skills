@@ -1,66 +1,103 @@
-# Cursor Agent Kit（bl-*）
+# omni-skills
 
-私人工程流程技能組，改編自 [mattpocock/skills](https://github.com/mattpocock/skills)，給 Cursor 使用。
+跨工具 skill 庫（Cursor／Codex／Claude／Antigravity）。Skill 正文只放這裡。工作區（公司 spec、任務檔）在私人庫 [omni-agent-work](https://github.com/Fallins/omni-agent-work)；本庫**不含**你家目錄路徑。
+
+舊的 [Fallins/skills](https://github.com/Fallins/skills.git) 是同一段歷史的 kit 快照，請改用本庫。
+
+新增或更新任何 skill／command **必須**改本 README（以及 [README.en.md](README.en.md)）：名稱、用途、怎麼用。啟發來源與範例選填。
 
 ## 安裝
 
+人看下面；請 Agent 協助安裝時改讀 [INSTALL.md](INSTALL.md)。
+
 ```bash
-cd ~/Documents/Git/Personal/cursor-agent-kit   # 或本 repo 路徑
-chmod +x scripts/install-to-cursor.sh
-./scripts/install-to-cursor.sh
+git clone https://github.com/Fallins/omni-skills.git
+cd omni-skills
+chmod +x scripts/install-skills.sh
+./scripts/install-skills.sh
 ```
 
-會把 `skills/bl-*` **symlink** 到 `~/.cursor/skills/`，並把 `commands/bl-*.md` 複製到 `~/.cursor/commands/`。
+安裝會問：工具、Cursor slash 額外前綴（通常留空）、是否使用 agent-work 工作區（`workspaceRoot`）。設定寫入 `~/.config/omni-skills/config.json`。沒有 `workspaceRoot` 時，工作區落到當前 git 的 `.scratch/<repo>/`。
 
-全部 skill 皆為 `disable-model-invocation: true`——**只在你手動呼叫 Command（或明確點名）時執行**。
-
-重新開一個 Agent 對話後即可使用 `/bl-setup` 等命令。
+`gs-grill-core` 不產生 slash（給 `gs-grill-me`／`gs-grill-with-docs` 讀）。
 
 ## 推薦流程
 
 ```
-/bl-setup                 # 每個專案一次：tracker + domain docs 設定
-  → /bl-grill-with-docs   # 對齊需求，維護 CONTEXT／ADR
-  → /bl-to-spec           # 收成 spec（寫入 agent-work）
-  → /bl-to-tickets        # 拆 tracer-bullet tickets
-  → /bl-implement         # TDD 實作，收尾 code-review
+/enroll                   # 五層骨架 + 納管目前 git
+/gs-setup                 # 若只要 tracker（enroll 已含）
+  → /gs-grill-with-docs
+  → /gs-to-spec
+  → /gs-to-tickets
+  → /gs-implement         # TDD 實作，收尾 code-review
   → （確認後再 commit）
 ```
 
-**一律進 agent-work**：`~/Documents/Git/agent-work/<repo名>/`（spec／tickets／CONTEXT／ADR／`issue-tracker.md`）。  
-**不在業務 repo 留任何檔或指標**（無 `.scratch/`、無 `docs/agents/`）。  
-Setup 完成條件：存在 `agent-work/<repo>/issue-tracker.md`。  
-約定見 [`docs/agent-work-and-setup.md`](docs/agent-work-and-setup.md)。
+對話用**繁體中文**。
 
-若尚未 setup：`/bl-to-spec` 等會提示 **`/bl-setup`**（或「幫我 setup」），完成前不寫入；查找一律到 agent-work。
+---
 
-其他：
+## Skill 清單
 
-| 命令 | 用途 |
+### gs-*（grill-skill 族）
+
+來自 [mattpocock/skills](https://github.com/mattpocock/skills) 的工程閉環：盤問 → spec → tickets → TDD／實作 → review／handoff。族前綴避免與以後引進的 `tdd`／`setup` 撞名。
+
+| 名稱 | 用途 | 怎麼用 |
+|------|------|--------|
+| `gs-setup` | 為目前 repo 在 AW 建／補 `issue-tracker.md` | `/gs-setup` 或「幫我 setup」。只保證 tracker；完整納管用 `enroll`。 |
+| `gs-grill-me` | 只訪談、不寫領域文件 | `/gs-grill-me`。會讀 `gs-grill-core`。 |
+| `gs-grill-with-docs` | 訪談並維護 CONTEXT／ADR | `/gs-grill-with-docs`。需求對齊時用這個。 |
+| `gs-grill-core` | 訪談迴圈本體 | **不要**當 slash。由上面兩個 Read。 |
+| `gs-to-spec` | 把對話收成 spec，不再訪談 | `/gs-to-spec`。缺 tracker 會閘門。 |
+| `gs-to-tickets` | spec 拆成 tracer-bullet tickets | `/gs-to-tickets`。核心票要 Behavior matrix。 |
+| `gs-implement` | 依 spec／tickets 實作（內含 TDD + review） | `/gs-implement`。未要求勿擅自 commit。 |
+| `gs-tdd` | 單獨跑 red→green | `/gs-tdd`；也給 `gs-implement` 讀。 |
+| `gs-code-review` | 雙軸 Standards／Spec review | `/gs-code-review`。 |
+| `gs-diagnosing-bugs` | 難除 bug／效能：先建回饋迴圈 | `/gs-diagnosing-bugs`。 |
+| `gs-handoff` | 交接給下一個 session | `/gs-handoff`。寫到 OS 暫存，不預設進 workspace。 |
+| `gs-domain-modeling` | 打磨詞彙與 ADR | 給 `gs-grill-with-docs` 讀；也可單獨用。 |
+
+啟發來源：mattpocock/skills（MIT，見 `LICENSE.upstream`、`NOTICE`）。
+
+### 其他
+
+| 名稱 | 用途 | 怎麼用 |
+|------|------|--------|
+| `enroll` | 整套 agent-work 概念：五層、做法 B、骨架、納管目前 git | 說「納管」「enroll」或 `/enroll`。可被模型叫。 |
+| `eli5` | 用 HTML 視覺解釋現有程式怎麼跑（Confirmed／Inferred／Unknown） | 「ELI5 這個流程」；產出在**被解釋的專案** `.agent-artifacts/eli5/`。不要改 production code。 |
+
+#### eli5 範例
+
+```text
+Use eli5 to explain the login flow.
+ELI5 這個地圖載入流程。
+用 eli5 解釋玩家進入關卡後，資料到底經過哪些地方。
+ELI5 why this page is slow.
+ELI5 這個 bug。我要看到 expected flow、actual flow，以及兩者在哪裡分岔。
+```
+
+## 設定
+
+見 `config.example.json`。實際檔在 `~/.config/omni-skills/config.json`，**不要**把絕對路徑 commit 進本庫。
+
+| 欄位 | 意義 |
 |------|------|
-| `/bl-grill-me` | 純 grilling（不寫領域文件） |
-| `/bl-tdd` | 單獨跑 TDD 迴圈 |
-| `/bl-code-review` | 雙軸 Standards／Spec review |
-| `/bl-diagnosing-bugs` | 難除的 bug／效能診斷 |
-| `/bl-handoff` | 交接給下一個 session |
-
-每個 skill 結束會提示建議的下一步命令。
-
-## 語言
-
-與使用者對話使用**繁體中文**。
+| `commandPrefix` | 可選。只加在 Cursor slash 檔名最前面。預設空 → `/gs-setup` |
+| `workspaceRoot` | agent-work clone。空則 scratch |
+| `layout` | `work-personal` 或 `scratch` |
+| `tools` | `cursor`／`codex`／`claude`／`antigravity` |
+| `personalPathSubstring` | 路徑含此字串 → personal lane（預設 `/Personal/`） |
+| `skillsSource` | 本 clone 的絕對路徑（安裝時寫入） |
 
 ## 更新
 
-改 skill 內容後，因是 symlink，存檔即生效（新對話較穩）。
-
-跟上游：
+skill 是 symlink，改檔即生效（新對話較穩）。跟上游 mattpocock：
 
 ```bash
 ./scripts/sync-from-upstream.sh
-# 依提示手動比對 merge，再更新 .upstream-commit
 ```
 
 ## 授權
 
-上游 MIT：見 `LICENSE.upstream` 與 `NOTICE`。
+上游 MIT：`LICENSE.upstream` 與 `NOTICE`。本庫改編見 `LICENSE`。
