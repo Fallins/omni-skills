@@ -64,7 +64,7 @@ if [[ "$YES" -eq 0 && -t 0 ]]; then
   local_ws="$(prompt "是否使用 agent-work 工作區？(y/N)" "N")"
   if [[ "$local_ws" == [yY] ]]; then
     LAYOUT="work-personal"
-    WORKSPACE_ROOT="$(prompt "workspaceRoot 絕對路徑" "${WORKSPACE_ROOT:-$HOME/Documents/Git/agent-work}")"
+    WORKSPACE_ROOT="$(prompt "workspaceRoot 絕對路徑" "${WORKSPACE_ROOT:-$HOME/Documents/Git/Personal/omni-agent-work}")"
   else
     LAYOUT="${LAYOUT:-scratch}"
     WORKSPACE_ROOT=""
