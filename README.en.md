@@ -23,9 +23,37 @@ Agents should follow [INSTALL.md](INSTALL.md). Config is written to `~/.config/o
 
 **`gs-*` (grill-skill):** engineering loop from [mattpocock/skills](https://github.com/mattpocock/skills) — interview, spec, tickets, TDD/implement, review, handoff. Prefix avoids clashing with other `tdd`/`setup` skills later.
 
-**Other:** `enroll` (agent-work concept: five layers, approach B, skeleton, enroll current git) and `eli5` (read-only HTML visual explanation under the target repo `.agent-artifacts/eli5/`).
+**Other:**
+
+| Name | Purpose | How to use |
+|------|---------|------------|
+| `enroll` | Agent-work concept: five layers, approach B, skeleton, enroll current git | Say "enroll" or `/enroll` |
+| `eli5` | Read-only HTML visual explanation of how code actually runs | "ELI5 this flow"; output in `.agent-artifacts/eli5/` |
+| `frontend-design` | New UI, substantial visual redesign or polish; typography, composition, hierarchy | `/frontend-design` |
+| `agent-browser` | Real-browser automation for QA, repro, screenshots, flow verification | `/agent-browser` (needs the CLI) |
+| `systematic-debugging` | Root-cause-first debugging for a concrete, investigable failure | `/systematic-debugging` |
+
+Debugging split: `systematic-debugging` when the failure is already stable and the job is finding the root cause. `gs-diagnosing-bugs` when the job is first building a reliable feedback loop (hard-to-reproduce bugs, inconsistent performance).
+
+### agent-browser CLI
+
+The skill is installed by omni-skills. Browser automation also needs:
+
+```bash
+npm install -g agent-browser
+agent-browser install
+```
+
+At runtime the skill loads `agent-browser skills get core` from the installed CLI.
 
 Talk to the user in Traditional Chinese.
+
+## Updating
+
+- `gs-*`: `./scripts/sync-from-upstream.sh` (mattpocock)
+- Skills with `UPSTREAM.md`: `./scripts/update-external-skills.sh` — fetches and diffs; **does not overwrite** adapted `SKILL.md`. `--apply-license` / `--mark-synced` after a manual merge.
+
+`agent-browser` is a thin wrapper; day-to-day updates come from the CLI (`agent-browser skills get core`), not from copying the upstream skill body.
 
 ## License
 

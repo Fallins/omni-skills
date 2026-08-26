@@ -4,5 +4,22 @@ This project adapts skills originally published in:
 
 Upstream license: see LICENSE.upstream (MIT, Copyright (c) 2026 Matt Pocock).
 
-Adaptations (Traditional Chinese UX, gs- family names, enroll / eli5, install layout)
-are maintained in this repository.
+This repository also includes adapted or wrapped skills from:
+
+  https://github.com/anthropics/skills
+  frontend-design
+  Apache-2.0
+  Full terms: skills/frontend-design/LICENSE.txt
+
+  https://github.com/vercel-labs/agent-browser
+  agent-browser
+  Apache-2.0
+  Full terms: skills/agent-browser/LICENSE.txt
+
+  https://github.com/obra/superpowers
+  systematic-debugging
+  MIT
+  Full terms: skills/systematic-debugging/LICENSE.txt
+
+Adaptations (Traditional Chinese UX, gs- family names, enroll / eli5 / third-party
+integrations, install layout) are maintained in this repository.

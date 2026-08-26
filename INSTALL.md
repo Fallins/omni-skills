@@ -35,6 +35,13 @@ chmod +x scripts/*.sh scripts/omni_config.py
 - 清掉舊的 `bl-*`／`ctx-enroll` 連結與 command
 - `work-personal` 時寫入家目錄做法 B 片段（Cursor rule／Codex／Claude／Gemini），內容用 `workspaceRoot` 填模板，不寫死套件作者的路徑
 
+`agent-browser` skill 由 omni-skills 安裝。Browser automation 另外需要外部 `agent-browser` CLI。安裝 skill **不必**先裝 CLI。
+
+```bash
+npm install -g agent-browser
+agent-browser install
+```
+
 官方 skill 發現路徑（安裝目標）：
 
 - Codex：`$HOME/.agents/skills`（另相容 `$HOME/.codex/skills`）

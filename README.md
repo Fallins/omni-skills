@@ -66,6 +66,14 @@ chmod +x scripts/install-skills.sh
 |------|------|--------|
 | `enroll` | 整套 agent-work 概念：五層、做法 B、骨架、納管目前 git | 說「納管」「enroll」或 `/enroll`。可被模型叫。 |
 | `eli5` | 用 HTML 視覺解釋現有程式怎麼跑（Confirmed／Inferred／Unknown） | 「ELI5 這個流程」；產出在**被解釋的專案** `.agent-artifacts/eli5/`。不要改 production code。 |
+| `frontend-design` | 新 UI、大型視覺調整、設計 polish；強調 typography、composition、hierarchy 與 distinctive design | `/frontend-design` 或「用 frontend-design 設計這個頁面」 |
+| `agent-browser` | 使用真實 browser 做操作、QA、repro、截圖與流程驗證 | `/agent-browser` 或「用 agent-browser 測這個登入流程」 |
+| `systematic-debugging` | 對 concrete failure 做 root-cause-first 除錯，先證明根因再修 | `/systematic-debugging` 或「用 systematic-debugging 查這個 failure」 |
+
+除錯分工：
+
+- `systematic-debugging`：已有穩定 failure，主要工作是追 root cause。
+- `gs-diagnosing-bugs`：難重現 bug／performance regression，主要工作是先建立可靠 feedback loop。
 
 #### eli5 範例
 
@@ -76,6 +84,25 @@ ELI5 這個地圖載入流程。
 ELI5 why this page is slow.
 ELI5 這個 bug。我要看到 expected flow、actual flow，以及兩者在哪裡分岔。
 ```
+
+## Runtime dependencies
+
+### agent-browser
+
+`agent-browser` skill 會由 omni-skills 安裝，但 browser automation 本身需要額外的 `agent-browser` CLI。
+
+```bash
+npm install -g agent-browser
+agent-browser install
+```
+
+Skill 在執行時會透過：
+
+```bash
+agent-browser skills get core
+```
+
+讀取與目前 CLI 版本一致的操作 workflow。
 
 ## 設定
 
@@ -92,11 +119,30 @@ ELI5 這個 bug。我要看到 expected flow、actual flow，以及兩者在哪�
 
 ## 更新
 
-skill 是 symlink，改檔即生效（新對話較穩）。跟上游 mattpocock：
+skill 是 symlink，改檔即生效（新對話較穩）。
+
+- **gs-***（mattpocock 改編）：
 
 ```bash
 ./scripts/sync-from-upstream.sh
 ```
+
+- **有 `UPSTREAM.md` 的外部 skill**（`frontend-design`、`systematic-debugging` 為 adapted mirror；`agent-browser` 為薄 wrapper，真正 workflow 在 CLI）：
+
+```bash
+./scripts/update-external-skills.sh
+./scripts/update-external-skills.sh frontend-design
+```
+
+腳本只抓上游、比對 recorded commit，**不會覆寫**本地改編過的 `SKILL.md`。LICENSE 可用 `--apply-license`；合併完成後 `--mark-synced` 寫回 `UPSTREAM.md` 的 commit。
+
+三種來源不是同一種改寫程度：
+
+| Skill | 策略 | 更新時 |
+|------|------|--------|
+| `frontend-design` | 上游正文 + 少量改編 | 看 diff，把上游新段 merge 進本地 guardrails／description |
+| `systematic-debugging` | 同上 | 保留與 `gs-diagnosing-bugs`／`gs-tdd` 的邊界 |
+| `agent-browser` | 幾乎不改寫 | 日常靠升級 CLI；本庫多半只跟 LICENSE |
 
 ## 授權
 
