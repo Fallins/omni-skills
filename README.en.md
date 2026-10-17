@@ -34,6 +34,7 @@ Agents should follow [INSTALL.md](INSTALL.md). Config is written to `~/.config/o
 | `frontend-design` | New UI, substantial visual redesign or polish; typography, composition, hierarchy | `/frontend-design` |
 | `agent-browser` | Real-browser automation for QA, repro, screenshots, flow verification | `/agent-browser` (needs the CLI) |
 | `systematic-debugging` | Root-cause-first debugging for a concrete, investigable failure | `/systematic-debugging` |
+| `large-task-orchestrator` | Evidence checks, task contracts, agent coordination and integration acceptance for large coding tasks; retains the Luna MAX executor preference and verifies the actual model mapping | Say "大型任務模式" or use `$large-task-orchestrator` (`/large-task-orchestrator` where slash commands are supported). Planning requests stay plan-only; explicitly request planning and execution to implement. |
 
 Debugging split: `systematic-debugging` when the failure is already stable and the job is finding the root cause. `gs-diagnosing-bugs` when the job is first building a reliable feedback loop (hard-to-reproduce bugs, inconsistent performance).
 

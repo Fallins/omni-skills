@@ -71,6 +71,7 @@ chmod +x scripts/install-skills.sh
 | `frontend-design` | 新 UI、大型視覺調整、設計 polish；強調 typography、composition、hierarchy 與 distinctive design | `/frontend-design` 或「用 frontend-design 設計這個頁面」 |
 | `agent-browser` | 使用真實 browser 做操作、QA、repro、截圖與流程驗證 | `/agent-browser` 或「用 agent-browser 測這個登入流程」 |
 | `systematic-debugging` | 對 concrete failure 做 root-cause-first 除錯，先證明根因再修 | `/systematic-debugging` 或「用 systematic-debugging 查這個 failure」 |
+| `large-task-orchestrator` | 大型程式任務的證據查核、規格拆解、代理分工與整合驗收；保留 Luna MAX 子代理偏好，依環境確認實際模型 | 說「大型任務模式」或使用 `$large-task-orchestrator`（支援 slash 的工具可用 `/large-task-orchestrator`）；只要求規劃時不實作，要執行請明確要求「規劃並執行」。 |
 
 除錯分工：
 

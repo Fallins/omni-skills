@@ -1,0 +1,80 @@
+# Plan、evidence ledger 與接續包
+
+選用現有專案文件或任務系統保存；沒有合適位置時先在對話或已允許的工作區建立草案，不擅自往使用者 repo 新增計畫檔。以下是一份可縮放的結構，不需要為小範圍工作填滿無關章節。
+
+## 1. 本輪邊界與 capability preflight
+
+- Outcome：本輪要達成的結果；plan-only 或 plan-and-execute，附使用者依據。
+- Scope / non-goals：哪些屬於本輪，哪些不屬於。
+- Repo / revision：實際路徑、base commit、branch、工作樹修改與適用 repo 指引。
+- Capabilities：可用的讀寫／測試／委派工具、並行限制、隔離方案與權限阻礙；執行方式為 delegation、primary-sequential 或 plan-only，記錄選擇依據及使用者是否要求指定代理／模型。
+- Dependency readiness：每個必要套件、服務、工具與 credential 設定的版本／API 相容性、目標環境、owner、available / missing / unknown、查驗方法與證據、所需權限或使用者步驟。credential 只記名稱與狀態，絕不記錄秘密值；建立／配置持續存取依宿主要求另取得確認。
+- Executor choice：executor_preference 預設 Luna MAX；記錄偏好來源、有效範圍、model_selection（ask_once / default）、requested alias、使用者確認、resolved model、resolved effort 與支援依據。同任務續作沿用有效選擇；多個版本或映射不明時待使用者選擇。未委派時解析欄位為 not applicable，不捏造模型設定；主代理循序執行如實記錄執行者，不改寫子代理偏好。分派後記錄工具實際接受的設定；宿主不提供回傳值時明列可核實範圍，勿聲稱已驗證實際後端。
+- Open startup questions：缺少且影響本輪決策的資訊；模型問題只在準備委派時提出，既有確認不重問，未回覆不視為同意。
+
+## 2. 需求與來源查核
+
+每項需求給一個 R-ID，記錄可驗收的描述、來源與重要性。把「必須滿足的需求」與「對目前實作的假設」分開。
+
+每筆 evidence 記錄：
+
+- E-ID／claim：正在支持或反駁的具體主張。
+- Source：文件／連結、repo file + symbol（適用時加行號）、commit／版本與查驗時間。
+- Method：直接閱讀、執行命令、測試或一手文件；測試附環境與輸出位置。
+- State：verified / assumed / unknown / contradicted。
+- Finding：實際觀察、驗證的範圍及限制。
+- Impact：影響的需求、設計決策或任務。
+
+「verified」只表示在所列版本與方法下有證據，不保證跨版本或未測情境。未執行程式的閱讀結論應標明 static inspection。
+
+## 3. Contradiction ledger 與可行性
+
+每筆 C-ID 列出：衝突的 E-IDs、差異、決策影響、裁決人、驗證動作、決議與理由、受影響任務及其下游。依 [SKILL.md 的分析確認關卡](../SKILL.md) 判定阻擋範圍；無法界定時先查核，不直接當成無關。
+
+分析確認清單：每個 Q-ID 包含問題、選項、建議、受影響的需求／接口／任務、阻擋範圍、解除條件、查核或決策來源。逐任務記錄 gate 結果；不受影響的任務須有依賴及 ownership 證據才可在授權內續做。全案基礎問題或使用者要求全案確認時，套用全案關卡。查核已解決的技術事項記為 findings；例行實作選擇記錄主代理的依據，不製造多餘批准。使用者明確接受有界風險／延後驗證／排除範圍時，保存適用範圍、替代驗證、重查時點與剩餘缺口；解除阻擋不等於證實假設或完成驗收。
+
+可行性摘要分成：
+
+- 已確認可沿用的現有能力。
+- 需要新增或改造的部分與大致實作方向。
+- 困難點：依賴、資料相容、並發／效能、跨模組接口等與本輪相關的風險。
+- 未知與信心水準；哪些未知會改變拆分或工期估計。
+
+Risk spike S-ID：
+
+- Question / hypothesis：要判定的技術問題。
+- Scope / sandbox：允許碰觸的範圍，是否僅唯讀或隔離實驗。
+- Budget / stop condition：時間或嘗試上限；何時已取得足夠證據。
+- Evidence for pass / fail：具體可觀察結果。
+- Decision after result：選哪個方向，或要重新規劃什麼。
+
+## 4. 架構、DAG 與分工
+
+- Shared contracts：資料 schema、API／事件接口、錯誤語意與版本；指定 owner。
+- DAG：例如 T1 → T2；T1 → T3；T2 + T3 → T4 integration。每條依賴寫明等的是哪個產物，不只畫順序。
+- Parallel groups：可並行的任務及理由；critical path 與阻塞點。
+- Ownership / conflict map：每個檔案／區域的唯一 writer；共用設定、schema、lockfile、產生碼的寫入協調方式。沒有隔離機制時縮小並行範圍，不冒險同時寫入。
+- Task contracts：使用 [task-contract.md](task-contract.md)，每項任務附 R-IDs、輸入及輸出、合約版本與 ready-to-dispatch 結果；未通過不得開始實作。
+- Estimates：若需要工期，使用有假設依據的範圍並註明信心；未知事項未驗證前不給虛假的精確承諾。
+
+## 5. 執行台帳與整合驗收
+
+每項任務記錄 owner、實際模型／effort 的可驗證設定、狀態、base revision、合約版本、交付產物、測試證據、審查問題、重試次數及下一步。改版／移交另記 stop-requested 與 stop-confirmed、代理及工具停止寫入的證據、保存的 diff／產物、新版確認及 ownership 移交；無法確認停止時維持 blocked。晚到舊版成果標 stale，記錄是否經新版核對後採用。
+
+狀態可用：planned → ready → running → implemented → spec-reviewed → code-reviewed → integrated → verified。blocked / partial 保留原因；修正或 rebase 後受影響的審查與測試需重新評估。
+
+完成矩陣將 R-ID 對應至實作任務、spec review、code review、主代理親自執行的最終完整驗收與剩餘缺口。記錄實作者與審查者，兩者相同時標 self-review；若使用者要求獨立審查，該要求未滿足或未經明確調整時不得宣稱完整完成。最後驗收涵蓋全部需求及相關正常、邊界、錯誤與整合情境，而不只是抽查子代理回報。記錄最終 commit／工作樹標識及測試環境，避免拿舊版本通過紀錄證明新修改。不能執行的必要驗證保留為未通過／待驗證，不以子代理自行驗收替代。
+
+## 6. Resume / replan context pack
+
+中斷或重大變更時，只保存足以安全接手的資訊：
+
+- 目前目標、授權範圍、使用者後續變更與 executor 選擇。
+- repo／branch／worktree／commit、不可覆蓋的既有修改。
+- 最新 plan／spec／evidence 的位置與版本。
+- 已完成及已整合的任務；測試與審查證據適用哪一版。
+- 每個仍在執行的代理／任務及工具／背景程序、owner、合約版本、最後已知狀態與產物、停筆確認及待移交範圍，避免重複派工。
+- blocking contradictions、待回覆問題、已試過的失敗及重試預算。
+- 下一個安全動作、所需前提與停止條件。
+
+恢復時先核對環境是否仍可用、實際 repo 狀態及既有任務是否已完成。接口、需求或 base revision 改變時，依 [SKILL.md 第 4 節](../SKILL.md) 完成停筆與工具狀態核對，再更新 DAG／contracts／驗收、移交 ownership，並取得新版確認後續做；不能只更新摘要或收到中斷回覆就假設舊 writer 已停止。Luna MAX 偏好保留；能力或映射改變時重新核實，實際委派前才處理必要的新選擇。
