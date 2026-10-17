@@ -2,7 +2,7 @@
 
 - Repository: vercel-labs/agent-browser
 - Path: skills/agent-browser
-- Synced commit: 8934fdb7ff5c016b46d473454ec51c0df814bead
+- Synced commit: dac13bb87468fe9d74a040d862720f6cc17a9565
 - Integration strategy: thin runtime wrapper
 - License: Apache-2.0
 

@@ -2,7 +2,7 @@
 
 - Repository: anthropics/skills
 - Path: skills/frontend-design
-- Synced commit: 3b3fad96af16a10759d930941b4520ba0c40edae
+- Synced commit: dbd4588f9e1033efb41dad4bef2f7947c8993d44
 - Integration strategy: adapted mirror
 - License: Apache-2.0
 
@@ -10,4 +10,5 @@
 
 - Refined discovery trigger.
 - Added existing-product design-system guardrails.
+- Ask only for missing essential context; preserve existing direction and authorization rather than adding a blanket confirmation gate.
 - Otherwise preserve upstream design philosophy.

@@ -2,7 +2,7 @@
 
 - Repository: obra/superpowers
 - Path: skills/systematic-debugging
-- Synced commit: b36e0829c6d0140e93cfef2ca599b1b07d4a7797
+- Synced commit: bb92a77741419a4ab5f06e711a283343f1ada0c3
 - Integration strategy: adapted mirror
 - License: MIT
 

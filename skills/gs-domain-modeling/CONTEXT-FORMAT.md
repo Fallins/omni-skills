@@ -1,5 +1,7 @@
 # CONTEXT.md Format
 
+All paths below are relative to `AW/` (resolved by the skill). Follow `AW/domain.md`; do not place these files in the business repo.
+
 ## Structure
 
 ```md
@@ -31,18 +33,18 @@ _Avoid_: Client, buyer, account
 
 ## Single vs multi-context repos
 
-**Single context (most repos):** One `CONTEXT.md` at the repo root.
+**Single context (most repos):** One `CONTEXT.md` at the AW root.
 
-**Multiple contexts:** A `CONTEXT-MAP.md` at the repo root lists the contexts, where they live, and how they relate to each other:
+**Multiple contexts:** A `CONTEXT-MAP.md` at the AW root lists the contexts, where they live, and how they relate to each other:
 
 ```md
 # Context Map
 
 ## Contexts
 
-- [Ordering](./src/ordering/CONTEXT.md) — receives and tracks customer orders
-- [Billing](./src/billing/CONTEXT.md) — generates invoices and processes payments
-- [Fulfillment](./src/fulfillment/CONTEXT.md) — manages warehouse picking and shipping
+- [Ordering](./contexts/ordering/CONTEXT.md) — receives and tracks customer orders
+- [Billing](./contexts/billing/CONTEXT.md) — generates invoices and processes payments
+- [Fulfillment](./contexts/fulfillment/CONTEXT.md) — manages warehouse picking and shipping
 
 ## Relationships
 

@@ -12,6 +12,23 @@
 
 人看下面；請 Agent 協助安裝時改讀 [INSTALL.md](INSTALL.md)。
 
+### Codex／Claude Code 原生安裝（Node.js 24+）
+
+已有 agent-work 時，優先在該庫執行 `node scripts/update-skills.ts --skills-source "<omni-skills clone 的絕對路徑>" --tools codex,claude`，同時套用版本釘選與全域規則。後續用 `node scripts/update-skills.ts`；加 `--check` 只檢查、不連網或寫入。
+
+獨立安裝（在本庫執行，不安裝 agent-work 規則）：
+
+```sh
+node scripts/install-skills.ts --tools codex,claude --yes
+node scripts/install-skills.ts --tools codex,claude --check
+```
+
+Windows 使用 directory junction，不需 Python、Bash 或更改 OS 設定；macOS／Linux 使用 symlink。安裝到 `~/.agents/skills`、`$CODEX_HOME/skills`（預設 `~/.codex/skills`）與 `$CLAUDE_CONFIG_DIR/skills`（預設 `~/.claude/skills`）。先檢查全部目標，遇到既有一般目錄、外來或損壞連結就停止；不刪除舊 skills。
+
+設定預設為 `~/.config/omni-skills/config.json`，可用 `OMNI_CONFIG` 或 `--config` 指定；`--home` 用於隔離安裝，忽略環境中的家目錄覆寫。原生入口只支援 Codex／Claude Code；其他工具沿用下方 Bash 入口。新開對話或重新載入後使用新 skills。
+
+### Bash 安裝（含 Cursor／Antigravity）
+
 ```bash
 git clone https://github.com/Fallins/omni-skills.git
 cd omni-skills
@@ -21,7 +38,7 @@ chmod +x scripts/install-skills.sh
 
 安裝會問：工具、Cursor slash 額外前綴（通常留空）、是否使用 agent-work 工作區（`workspaceRoot`）。設定寫入 `~/.config/omni-skills/config.json`。沒有 `workspaceRoot` 時，工作區落到當前 git 的 `.scratch/<repo>/`。
 
-`gs-grill-core` 不產生 slash（給 `gs-grill-me`／`gs-grill-with-docs` 讀）。
+Bash 安裝器不為 `gs-grill-core` 產生 Cursor slash 檔；Codex／Claude Code 可能仍列出此 skill。它供 `gs-grill-me`／`gs-grill-with-docs` 讀取，不作一般使用入口。
 
 ## 推薦流程
 
@@ -122,7 +139,11 @@ agent-browser skills get core
 
 ## 更新
 
-skill 是 symlink，改檔即生效（新對話較穩）。
+skill 是 symlink／junction，改檔即生效（新對話較穩）。agent-work 使用者依其釘選更新，不直接對 detached clone 執行 pull。
+
+2026-10-17 已審查所有既有 skills 的來源：gs-* 補強依賴順序、驗證證據、跨工具 review 與 tracker 關係；frontend-design 合併視覺設計與可及性指引；systematic-debugging 修正環境診斷洩漏變數值的範例。各 skill 的呼叫方式如上表；本地 AW／CONTEXT 規約保留。agent-browser 的 wrapper 未變，僅更新查核版本。詳見 [來源同步紀錄](docs/upstream-sync-2026-10-17.md)。
+
+原生安裝器測試：`node --test scripts/tests/install-skills.test.ts`。
 
 - **gs-***（mattpocock 改編）：
 

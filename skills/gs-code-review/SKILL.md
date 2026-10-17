@@ -2,7 +2,7 @@
 name: gs-code-review
 description: >-
   Two-axis review (Standards vs Spec) of git diff since a fixed point, via
-  parallel Cursor Task subagents. Manual invoke only (/gs-code-review).
+  parallel subagents when available. Manual invoke only (/gs-code-review).
 disable-model-invocation: true
 ---
 
@@ -17,7 +17,7 @@ disable-model-invocation: true
 - **Standards** — 是否符合本 repo 已文件化的寫碼標準？
 - **Spec** — 是否忠實實作 originating issue／PRD／spec？
 
-兩軸用 **平行 Task subagent**（`subagent_type: generalPurpose`）執行，避免互相汙染，再由你彙總。
+環境支援且允許委派時，兩軸用**平行 subagent** 執行，避免互相汙染，再由你彙總。使用當前工具的 subagent API；無此能力時自行分開完成兩軸並註明未平行執行。
 
 若缺 `AW/issue-tracker.md`（`AW` 見 `docs/agent-work-and-setup.md`），先 Read 套件 `docs/agent-work-and-setup.md` 並執行 **缺 setup 閘門**（提示 `/gs-setup` 或「幫我 setup」）。spec 來源：問使用者或掃 `AW/`（**不要**猜業務 repo `docs/agents/`）。
 
@@ -40,7 +40,7 @@ disable-model-invocation: true
 
 ### 3. Standards 來源
 
-專案內寫碼規範，例如：
+找出適用於此次變更的專案寫碼規範；`CODING_STANDARDS.md`／`CONTRIBUTING.md` 存在時必須列入並讀取，不能只把下列檔名當例子略過：
 
 - `.cursor/rules/**`
 - `AGENTS.md`／`CLAUDE.md`
@@ -67,15 +67,15 @@ Smell 清單（what → fix）：
 - Middle Man → 拿掉中間人
 - Refused Bequest → 改組合
 
-### 4. 平行開兩個 Task
+### 4. 分開執行兩軸
 
-同一則回覆裡兩個 `Task` 呼叫，皆 `generalPurpose`。
+可委派時一併啟動兩個 subagent，等待它們的回傳再彙總，不留背景 review 未讀就宣告完成。無可用 subagent 時依相同 brief 分別審查。
 
 **Standards prompt** 含：diff 指令、commit 列表、standards 檔路徑清單、**完整 smell baseline**、brief：逐檔／hunk 報告 (a) 違反文件標準（引檔＋規則）(b) baseline smell（點名＋引用 hunk）。區分硬違反與判斷呼籲。略過工具已抓的。400 字內。用繁中或英文皆可，父 agent 會轉繁中。
 
 **Spec prompt** 含：diff、commit 列表、spec 路徑或全文、brief：(a) 缺／半套需求 (b) 範圍外行為 (c) 看似做了但做錯。每點引 spec。400 字內。
 
-無 spec 則跳過 Spec Task。
+無 spec 則跳過 Spec 軸並明確註記。
 
 ### 5. 彙總
 

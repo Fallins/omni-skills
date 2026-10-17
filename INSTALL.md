@@ -2,7 +2,9 @@
 
 協助使用者安裝 omni-skills。對話用繁體中文。**不要**把使用者的家目錄路徑寫進本 git。
 
-## 1. 問參數（一次一題，附建議）
+## 1. 確認參數
+
+沿用使用者已指定的工具、路徑與授權；只詢問缺少且無法推導的必要參數，不要重問已確認的選擇。
 
 1. **工具**（建議全選）：`cursor`、`codex`、`claude`、`antigravity`
 2. **Cursor slash 額外前綴** `commandPrefix`（建議空。skill 已叫 `gs-setup`，空前綴的 slash 即 `/gs-setup`）
@@ -11,7 +13,33 @@
    - 否：`layout=scratch`，不設 `workspaceRoot`
 4. **個人 lane 路徑片段**（建議 `/Personal/`；git 根路徑含此字串 → `personal/`）
 
-## 2. 執行
+## 2. Codex／Claude Code 原生入口（優先用於 Windows）
+
+需要 Node.js 24+，不需 npm install、Bash 或 Python。Windows 以 junction 連到來源，其他系統用 symlink。
+
+有 agent-work 時，在 **agent-work clone** 執行：
+
+```sh
+node scripts/update-skills.ts --skills-source "<omni-skills clone 的絕對路徑>" --tools codex,claude
+node scripts/update-skills.ts --check
+```
+
+它要求乾淨、origin 為官方來源且停在 main 或 detached HEAD 的既有專用 skills clone；不自動 clone、不改 git config、不移動 main。依 agent-work 的 pin fetch 並切到 detached HEAD，先預檢 skills 與規則目標再安裝。後續更新直接 `node scripts/update-skills.ts`。
+
+若只需獨立 skills，在 **omni-skills clone** 執行：
+
+```sh
+node scripts/install-skills.ts --tools codex,claude --yes
+node scripts/install-skills.ts --tools codex,claude --check
+```
+
+可加 `--workspace-root "<agent-work 絕對路徑>"` 使用 work-personal 配置；獨立入口不寫家目錄規則。沒有 workspaceRoot 時用 scratch。既有設定若含其他工具，必須明確傳 `--tools codex,claude` 才會更換 tools 欄位；不刪除其他工具的檔案。
+
+兩者都保留未知 config 欄位；`--config` 或 `OMNI_CONFIG` 覆寫設定位置。`--home` 隔離測試家目錄，忽略環境中的家目錄覆寫，明確 `--config` 仍有效。安裝器遇到一般目錄、外來／損壞連結或連結父目錄即拒絕；不自動清理舊 skills。`--check` 不寫入；updater 的 check 也不 fetch 或 checkout。獨立安裝器 `--dry-run` 可預檢。
+
+Codex 安裝到 `~/.agents/skills` 及 `CODEX_HOME/skills`（預設 `~/.codex/skills`），Claude Code 到 `CLAUDE_CONFIG_DIR/skills`（預設 `~/.claude/skills`）。這裡不是 Claude Cowork 或雲端 skills 安裝。
+
+## 3. Bash 入口（Cursor／Antigravity 或既有跨工具流程）
 
 在**本套件 clone** 根目錄：
 
@@ -49,6 +77,6 @@ agent-browser install
 - Antigravity：`~/.gemini/config/skills/` 與 `~/.gemini/antigravity-cli/skills/`
 - Cursor：`~/.cursor/skills/`；slash 在 `~/.cursor/commands/`
 
-## 3. 回報
+## 4. 回報
 
-列出寫入的 config 路徑、symlink 目標、產生的 command 檔名。請使用者新開 Agent 對話後試 `/enroll` 或 `/gs-setup`。
+列出寫入的 config 路徑、symlink／junction 目標；Bash 流程另列出產生的 command 檔名。以 `--check` 驗證，能執行工具時另確認實際 skill discovery；不可將檔案存在視為模型已載入。請使用者新開 Agent 對話後試 `/enroll` 或 `/gs-setup`。

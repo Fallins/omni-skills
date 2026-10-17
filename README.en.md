@@ -10,6 +10,23 @@ The Chinese [README.md](README.md) is canonical. Keep both files updated when ad
 
 ## Install
 
+### Native Codex / Claude Code installation (Node.js 24+)
+
+With agent-work, run `node scripts/update-skills.ts --skills-source "<absolute omni-skills clone path>" --tools codex,claude` from that repository to apply its version pin and global rules. Later run `node scripts/update-skills.ts`; add `--check` for a read-only check without fetching.
+
+Standalone, from this repository (does not install agent-work rules):
+
+```sh
+node scripts/install-skills.ts --tools codex,claude --yes
+node scripts/install-skills.ts --tools codex,claude --check
+```
+
+Windows uses directory junctions without Python, Bash or OS changes; macOS/Linux use symlinks. Targets: `~/.agents/skills`, `$CODEX_HOME/skills` (default `~/.codex/skills`) and `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). All targets are checked before writing; ordinary directories, foreign or broken links stop installation. Old skills are not removed.
+
+Config defaults to `~/.config/omni-skills/config.json`; override with `OMNI_CONFIG` or `--config`. An explicit `--home` isolates installation from environment home overrides. Native installation supports only Codex/Claude Code; use Bash for other tools. Start a new conversation or reload skills after installation.
+
+### Bash installation (including Cursor / Antigravity)
+
 ```bash
 git clone https://github.com/Fallins/omni-skills.git
 cd omni-skills
@@ -19,7 +36,7 @@ chmod +x scripts/install-skills.sh
 
 Agents should follow [INSTALL.md](INSTALL.md). Config is written to `~/.config/omni-skills/config.json`. With no `workspaceRoot`, workspaces fall back to `<git-root>/.scratch/<repo>/`.
 
-`gs-grill-core` does not get a slash command.
+The Bash installer does not generate a Cursor slash file for `gs-grill-core`. Native Codex/Claude discovery may list it; it is a supporting skill read by the interview skills.
 
 ## Skill families
 
@@ -52,6 +69,12 @@ At runtime the skill loads `agent-browser skills get core` from the installed CL
 Talk to the user in Traditional Chinese.
 
 ## Updating
+
+Skills use symlinks/junctions. With agent-work, update through its pinned updater rather than pulling a detached checkout.
+
+On 2026-10-17 all existing sources were reviewed. The gs-* updates strengthen dependency ordering, verification evidence, cross-tool review and tracker relations while retaining AW/CONTEXT conventions. frontend-design gains visual/accessibility guidance; systematic-debugging stops diagnostic examples from printing environment variable values. Invocation remains as documented above. agent-browser's wrapper is unchanged; only its reviewed revision advances. See the [sync record](docs/upstream-sync-2026-10-17.md).
+
+Native installer tests: `node --test scripts/tests/install-skills.test.ts`.
 
 - `gs-*`: `./scripts/sync-from-upstream.sh` (mattpocock)
 - Skills with `UPSTREAM.md`: `./scripts/update-external-skills.sh` — fetches and diffs; **does not overwrite** adapted `SKILL.md`. `--apply-license` / `--mark-synced` after a manual merge.

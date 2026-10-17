@@ -51,7 +51,7 @@ disable-model-invocation: true
 依 tracker：
 
 - **Local（agent-work）**：`AW/<feature>/issues/<NN>-<slug>.md`，從 `01`、依賴先寫；一票一檔。
-- **GitHub／其他**：依 `AW/issue-tracker.md` 建立 issue，並寫 blocking 關係。
+- **GitHub／其他**：依 `AW/issue-tracker.md`，先 blocker 再依賴它的票，讓關係引用實際識別碼。支援時用原生 blocking 關係，否則在子票本文寫 `Blocked by`；原生關係已設定則不必重複本文清單。來源若是既有 issue，依 tracker 操作建立 sub-issue 關係；不支援時在子票寫 `Part of` 引用。父子關係不等於 blocking 關係。除建立已核准的父子關聯外，不關閉或改寫父票。
 
 Local 檔模板：
 

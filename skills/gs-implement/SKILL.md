@@ -18,7 +18,8 @@ disable-model-invocation: true
 
 1. Read 套件 `docs/agent-work-and-setup.md`；執行 **缺 setup 閘門**（無 `AW/issue-tracker.md` 則提示 **`/gs-setup`** 或「幫我 setup」）。
 2. 讀取 spec／tickets 全文；路徑依 `AW/issue-tracker.md`（Local → AW）或使用者給的路徑。**查找一律到 `AW/`**，不要業務 repo 根目錄的 `docs/agents/`（`scratch` layout 時 `AW` 即 `.scratch/<repo>/`）。
-3. 用 Read 遵循 `gs-tdd/SKILL.md`（與本 skill 同層安裝目錄）：先與使用者確認 seams，再以 red→green 推進。
+   使用者提供 ticket 編號／引用時，先依 tracker 取回內容，開始前報出標題以確認對象；只有仍有歧義時才詢問，不把清楚的引用變成額外核准。
+3. 用 Read 遵循 `gs-tdd/SKILL.md`（與本 skill 同層安裝目錄）：沿用已確認的 seams，再以 red→green 推進；確有新的重要 seam 決策才釐清。
 4. 實作期間定期跑型別檢查與相關單測；收尾跑完整測試套件（專案慣例指令，如 `bun run check`）。
 5. 完成後用 Read 遵循並執行 `gs-code-review/SKILL.md`（與本 skill 同層安裝目錄）（對這次變更做雙軸 review）。
 6. **Commit**：若使用者未明確要求 commit，只整理建議的 commit message 並請使用者確認後再提交；若使用者已要求 commit／完成實作並提交，再依專案慣例提交。

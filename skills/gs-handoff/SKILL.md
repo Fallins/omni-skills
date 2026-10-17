@@ -16,7 +16,7 @@ disable-model-invocation: true
 
 寫一份交接文件，讓新 session 的 agent 能接續工作。
 
-- 存到**使用者 OS 的暫存目錄**（例如 macOS `$TMPDIR`），**不要**預設寫進 workspace（除非使用者明確要求路徑）。
+- 存到**使用者 OS 的暫存目錄**（Unix 優先 `$TMPDIR`，未設定則 `/tmp`；Windows 使用 `%TEMP%`／PowerShell `$env:TEMP`），**不要**預設寫進 workspace（除非使用者明確要求路徑）。
 - 含「建議 skills」小節：列出下一步該呼叫的 `/gs-*`。
 - 已存在於 spec／plan／ADR／issue／commit／diff 的內容不要重複貼；改引用路徑或 URL。
 - 遮罩敏感資訊（金鑰、密碼、個資）。

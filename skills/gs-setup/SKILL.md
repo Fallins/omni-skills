@@ -40,6 +40,8 @@ disable-model-invocation: true
 - 無 monorepo 訊號 → 直接 **single-context**：`AW/CONTEXT.md` + `AW/docs/adr/`
 - 有 monorepo → 問 single vs multi（文件仍只在 `AW/`）
 
+若選 GitHub／GitLab，按需讀取 [references/remote-tracker-notes.md](./references/remote-tracker-notes.md)，將適用的讀取、blocking 與父子關係操作記入 `AW/issue-tracker.md`。保留既有 tracker 與標籤設定；選擇遠端 tracker 不代表授權建立遠端標籤或開啟 PR triage。
+
 ### 3. 確認草稿
 
 展示即將建立／覆寫的路徑（僅 `AW/` 下），例如：
