@@ -183,7 +183,7 @@ function finalAcceptanceReady({ activeCoordinator, integratedRevision, acceptedR
 test('coordinate-work preserves a single owner, confirmed stop, and final integrated acceptance', () => {
   assert.match(coordinator, /If `large-task-orchestrator` \(LTO\) is active, LTO remains the only coordinator/);
   assert.match(coordinator, /confirmed stopped/);
-  assert.match(coordinator, /in-flight I\/O has ended/);
+  assert.match(coordinator, /in-flight I\/O is drained/);
   assert.match(coordinator, /personally performs final whole-scope acceptance/);
   assert.match(lifecycle, /one source of truth/);
   assert.match(lifecycle, /stop cannot be confirmed/);

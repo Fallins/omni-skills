@@ -6,7 +6,7 @@ Record the task authorization and scope; active coordinator; Plan/contract revis
 
 ## 2. Prepare ownership and resources
 
-For every task, record one goal, requirement IDs, owner, owned files/regions, read-only inputs, exact contract revision, dependencies and artifact revisions, non-goals, verification evidence, retry/stop limits, and report format. Map shared files and semantic resources (for example DB/schema, NAS paths, ports, long-lived services, generated files, external accounts, and background I/O). Serialize conflicts or assign one owner; separate worktrees alone do not prove isolation.
+For every task, record one goal, requirement IDs, owner, owned files/regions, read-only inputs, exact contract revision, dependencies and artifact revisions, non-goals, verification evidence, retry/stop limits, and report format. Map shared files and semantic resources (for example DB/schema, NAS paths, leases, ports, long-lived services, generated files, external accounts, and background I/O). For persistent work, record in-flight operations and lease owner/renewal/expiry. Serialize conflicts or assign one owner; separate worktrees alone do not prove isolation.
 
 ## 3. Dispatch and track
 
@@ -14,7 +14,7 @@ Dispatch only tasks authorized and marked ready-to-dispatch. Record requested ve
 
 ## 4. Stop, revise, and hand off
 
-On cancellation, contract change, or owner transfer, stop new dispatch and integration for affected work. Request a stop, then verify the worker and every relevant tool/background process have stopped writing and that in-flight I/O ended. Save diff, artifact, evidence, last contract revision, and exact resume point. If stop cannot be confirmed, keep the overlap blocked and do not assign a replacement writer. Publish a new contract/ownership revision and obtain acknowledgement before work resumes. Mark late results against old revisions stale until reconciled.
+On cancellation, contract change, or owner transfer, stop new dispatch and integration for affected work. Request a stop, then verify the worker and every relevant tool/background process have stopped writing, in-flight I/O is drained, and leases/writer locks are released or confirmed expired. Save diff, artifact, evidence, last contract revision, and exact resume point. If stop cannot be confirmed, keep the overlap blocked and do not assign a replacement writer. Publish a new contract/ownership revision and obtain acknowledgement before work resumes. Mark late results against old revisions stale until reconciled.
 
 ## 5. Review, integrate, and accept
 
