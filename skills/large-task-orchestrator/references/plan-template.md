@@ -9,7 +9,7 @@
 - Repo / revision：實際路徑、base commit、branch、工作樹修改與適用 repo 指引。
 - Capabilities：可用的讀寫／測試／委派工具、並行限制、隔離方案與權限阻礙；執行方式為 delegation、primary-sequential 或 plan-only，記錄選擇依據及使用者是否要求指定代理／模型。
 - Dependency readiness：每個必要套件、服務、工具與 credential 設定的版本／API 相容性、目標環境、owner、available / missing / unknown、查驗方法與證據、所需權限或使用者步驟。credential 只記名稱與狀態，絕不記錄秘密值；建立／配置持續存取依宿主要求另取得確認。
-- Executor choice：executor_preference 預設 Luna MAX；記錄偏好來源、有效範圍、model_selection（ask_once / default）、requested alias、使用者確認、resolved model、resolved effort 與支援依據。同任務續作沿用有效選擇；多個版本或映射不明時待使用者選擇。未委派時解析欄位為 not applicable，不捏造模型設定；主代理循序執行如實記錄執行者，不改寫子代理偏好。分派後記錄工具實際接受的設定；宿主不提供回傳值時明列可核實範圍，勿聲稱已驗證實際後端。
+- ModelAssignmentPlan：依任務角色列適任能力、推薦模型／思考程度、理由、可接受替代、成本假設及升級條件。大型 Plan 使用最高適任能力與最高支援思考程度；監管／整合 writer 同級或略低；子任務先看適任，再比較 CP 值。正式執行時查當下可用模型與支援設定，不寫固定偏好或過時品牌排名。分開記錄 recommended、requested、tool-accepted、observed；無法設定或核實時說明限制，不宣稱已切換。未委派時標 not applicable；主代理循序執行如實記錄執行方式。
 - Open startup questions：缺少且影響本輪決策的資訊；模型問題只在準備委派時提出，既有確認不重問，未回覆不視為同意。
 
 ## 2. 需求與來源查核
@@ -77,4 +77,4 @@ Risk spike S-ID：
 - blocking contradictions、待回覆問題、已試過的失敗及重試預算。
 - 下一個安全動作、所需前提與停止條件。
 
-恢復時先核對環境是否仍可用、實際 repo 狀態及既有任務是否已完成。接口、需求或 base revision 改變時，依 [SKILL.md 第 4 節](../SKILL.md) 完成停筆與工具狀態核對，再更新 DAG／contracts／驗收、移交 ownership，並取得新版確認後續做；不能只更新摘要或收到中斷回覆就假設舊 writer 已停止。Luna MAX 偏好保留；能力或映射改變時重新核實，實際委派前才處理必要的新選擇。
+恢復時先核對環境是否仍可用、實際 repo 狀態及既有任務是否已完成。接口、需求或 base revision 改變時，依 [SKILL.md 第 4 節](../SKILL.md) 完成停筆與工具狀態核對，再更新 DAG／contracts／驗收、移交 ownership，並取得新版確認後續做；不能只更新摘要或收到中斷回覆就假設舊 writer 已停止。模型推薦只作計畫；恢復工作時核對實際設定、工具能力和原計畫適用性，必要時更新推薦與證據。

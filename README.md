@@ -40,6 +40,10 @@ chmod +x scripts/install-skills.sh
 
 Bash 安裝器不為 `gs-grill-core` 產生 Cursor slash 檔；Codex／Claude Code 可能仍列出此 skill。它供 `gs-grill-me`／`gs-grill-with-docs` 讀取，不作一般使用入口。
 
+## 路由規則草案
+
+G1 新增的路由草案在 [docs/skill-routing-rule-draft.md](docs/skill-routing-rule-draft.md)，僅供 review，尚未生效。安裝器只連結 skills/ 內的技能；規則草案需在之後的適用層另行審核與安裝，不會因更新 skills 自動生效。
+
 ## 推薦流程
 
 ```
@@ -88,7 +92,9 @@ Bash 安裝器不為 `gs-grill-core` 產生 Cursor slash 檔；Codex／Claude Co
 | `frontend-design` | 新 UI、大型視覺調整、設計 polish；強調 typography、composition、hierarchy 與 distinctive design | `/frontend-design` 或「用 frontend-design 設計這個頁面」 |
 | `agent-browser` | 使用真實 browser 做操作、QA、repro、截圖與流程驗證 | `/agent-browser` 或「用 agent-browser 測這個登入流程」 |
 | `systematic-debugging` | 對 concrete failure 做 root-cause-first 除錯，先證明根因再修 | `/systematic-debugging` 或「用 systematic-debugging 查這個 failure」 |
-| `large-task-orchestrator` | 大型程式任務的證據查核、規格拆解、代理分工與整合驗收；保留 Luna MAX 子代理偏好，依環境確認實際模型 | 說「大型任務模式」或使用 `$large-task-orchestrator`（支援 slash 的工具可用 `/large-task-orchestrator`）；只要求規劃時不實作，要執行請明確要求「規劃並執行」。 |
+| understand-task | 查明任務目標、現況證據、範圍與成功條件 | 開始規劃或實作前仍需釐清時使用；簡單問題不強迫跑流程。 |
+| plan-change | 為程式變更建立可驗證計畫，提供 light／large 模式；大型涵蓋同 repo 多需求／BUG 與跨 repo | 只要求計畫時用 plan-change；大型 execute 過渡期仍由 large-task-orchestrator 作唯一整合入口。 |
+| large-task-orchestrator | 大型 execute 的既有單一協調入口，保留停止／移交、單一 writer、整合驗收與恢復保障 | 說「大型任務模式」或使用 $large-task-orchestrator；大型 plan-only 改用 plan-change。此入口不設定固定模型偏好。 |
 
 除錯分工：
 
