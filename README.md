@@ -93,7 +93,7 @@ G1 新增的路由草案在 [docs/skill-routing-rule-draft.md](docs/skill-routin
 | `agent-browser` | 使用真實 browser 做操作、QA、repro、截圖與流程驗證 | `/agent-browser` 或「用 agent-browser 測這個登入流程」 |
 | `systematic-debugging` | 對 concrete failure 做 root-cause-first 除錯，先證明根因再修 | `/systematic-debugging` 或「用 systematic-debugging 查這個 failure」 |
 | understand-task | 查明任務目標、現況證據、範圍與成功條件 | 開始規劃或實作前仍需釐清時使用；簡單問題不強迫跑流程。 |
-| plan-change | 為程式變更建立可驗證計畫，提供 light／large 模式；大型涵蓋同 repo 多需求／BUG 與跨 repo | 只要求計畫時用 plan-change；大型 execute 過渡期仍由 large-task-orchestrator 作唯一整合入口。 |
+| plan-change | 為程式變更建立可驗證計畫，提供 light／large 模式；large 會先核對規劃者實際模型／effort，再研究同 repo 多需求／BUG 或跨 repo 工作 | 只要求計畫時用 plan-change；大型 execute 過渡期仍由 large-task-orchestrator 作唯一整合入口。子任務模型推薦另行記錄。 |
 | large-task-orchestrator | 大型 execute 的既有單一協調入口，保留停止／移交、單一 writer、整合驗收與恢復保障 | 說「大型任務模式」或使用 $large-task-orchestrator；大型 plan-only 改用 plan-change。此入口不設定固定模型偏好。 |
 
 除錯分工：

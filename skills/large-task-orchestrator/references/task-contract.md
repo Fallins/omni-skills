@@ -44,10 +44,12 @@
 
 ## 模型推薦（適用於委派工作）
 
+本節只記錄子任務／委派角色的推薦，不代表撰寫大型 Plan 的規劃者實際模型或 effort。規劃者配置須另在 Plan 的 PlannerExecutionCheck 中於研究前核實。
+
 - 列出 task role、領域推理、上下文、工具／視覺能力及品質需求，再給能力適任的首選模型與思考程度。
 - 記錄推薦理由、可接受替代、CP 值假設、不可降級條件和升級時機；先判定適任，再比較成本。
 - 區分 recommended、requested、tool-accepted、observed。模型與 effort 依執行當時的可用目錄和宿主支援核對；無法核實就標 unknown，不寫死品牌或聲稱已切換。
-- 大型規劃使用最高適任能力和最高支援思考程度；監管／整合 writer 同級或略低一階。範圍局部不代表高風險任務可自動降級。
+- 監管／整合子任務的推薦能力以 Plan 中 PlannerExecutionCheck 的 required capability 為基準，同級或略低一階；這仍是子任務推薦，不是其實際配置證據。範圍局部不代表高風險任務可自動降級。
 
 ## Ready-to-dispatch 檢查
 

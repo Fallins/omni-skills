@@ -56,7 +56,7 @@ The G1 routing draft lives at [docs/skill-routing-rule-draft.md](docs/skill-rout
 | `agent-browser` | Real-browser automation for QA, repro, screenshots, flow verification | `/agent-browser` (needs the CLI) |
 | `systematic-debugging` | Root-cause-first debugging for a concrete, investigable failure | `/systematic-debugging` |
 | understand-task | Ground a task in its goal, evidence, scope and success conditions | Use before planning or implementation when context still needs checking; simple questions do not need the full flow. |
-| plan-change | Produce a verifiable plan with light and large modes; large plans cover same-repo request/bug batches and cross-repo work | Use for plan-only requests. During the G1 transition, large execution still uses large-task-orchestrator as its sole integration entry. |
+| plan-change | Produce verifiable light or large plans; large plans verify the planner's actual model/effort before researching same-repo request/bug batches or cross-repo work | Use for plan-only requests. Child-task model recommendations are separate. During the G1 transition, large execution still uses large-task-orchestrator as its sole integration entry. |
 | large-task-orchestrator | Existing single coordination entry for large execution, retaining stop/handoff, single-writer, integration acceptance and resume safeguards | Say "大型任務模式" or use $large-task-orchestrator. Large plan-only requests use plan-change. No fixed model preference is embedded. |
 
 Debugging split: `systematic-debugging` when the failure is already stable and the job is finding the root cause. `gs-diagnosing-bugs` when the job is first building a reliable feedback loop (hard-to-reproduce bugs, inconsistent performance).
