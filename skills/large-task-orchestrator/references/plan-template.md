@@ -9,8 +9,9 @@
 - Repo / revision：實際路徑、base commit、branch、工作樹修改與適用 repo 指引。
 - Capabilities：可用的讀寫／測試／委派工具、並行限制、隔離方案與權限阻礙；執行方式為 delegation、primary-sequential 或 plan-only，記錄選擇依據及使用者是否要求指定代理／模型。
 - Dependency readiness：每個必要套件、服務、工具與 credential 設定的版本／API 相容性、目標環境、owner、available / missing / unknown、查驗方法與證據、所需權限或使用者步驟。credential 只記名稱與狀態，絕不記錄秘密值；建立／配置持續存取依宿主要求另取得確認。
-- Executor choice：executor_preference 預設 Luna MAX；記錄偏好來源、有效範圍、model_selection（ask_once / default）、requested alias、使用者確認、resolved model、resolved effort 與支援依據。同任務續作沿用有效選擇；多個版本或映射不明時待使用者選擇。未委派時解析欄位為 not applicable，不捏造模型設定；主代理循序執行如實記錄執行者，不改寫子代理偏好。分派後記錄工具實際接受的設定；宿主不提供回傳值時明列可核實範圍，勿聲稱已驗證實際後端。
-- Open startup questions：缺少且影響本輪決策的資訊；模型問題只在準備委派時提出，既有確認不重問，未回覆不視為同意。
+- PlannerExecutionCheck（large only，在任何實質 Plan 研究前完成）：記錄規劃者所需能力／effort、目前實際模型與 effort、宿主支援上限、可觀察證據來源、能否透過受支援方式指定，以及狀態 matched／mismatch／unverifiable／unavailable。若配置不符或無法核實，記錄使用者通知與本次授權是否允許 fallback；未獲准 fallback 不開始大型 Plan，獲准則標 provisional 並保留限制。記錄 fallback 授權範圍；允許繼續寫 Plan 不等於允許派工。Light 標 not applicable。
+- SubtaskModelAssignments：針對委派角色與子任務列適任能力、推薦模型／思考程度、理由、可接受替代、成本假設及升級條件。監管／整合 writer 推薦同級或略低於大型規劃要求；子任務先看適任，再比較 CP 值。正式委派前查當下可用模型與支援設定，不寫固定偏好或過時品牌排名。每項分開記錄 recommended、requested、tool-accepted、observed；工具不能設定或核實時說明限制，不宣稱已切換。沒有委派任務就標 not applicable。
+- Open startup questions：缺少且影響本輪決策的資訊。large Plan 的規劃者配置必須在研究前核對；若無法達成／核實，先通知並依現有授權決定 fallback 或暫停。子任務模型問題只在準備委派時提出；既有確認不重問，未回覆不視為同意。
 
 ## 2. 需求與來源查核
 
@@ -77,4 +78,4 @@ Risk spike S-ID：
 - blocking contradictions、待回覆問題、已試過的失敗及重試預算。
 - 下一個安全動作、所需前提與停止條件。
 
-恢復時先核對環境是否仍可用、實際 repo 狀態及既有任務是否已完成。接口、需求或 base revision 改變時，依 [SKILL.md 第 4 節](../SKILL.md) 完成停筆與工具狀態核對，再更新 DAG／contracts／驗收、移交 ownership，並取得新版確認後續做；不能只更新摘要或收到中斷回覆就假設舊 writer 已停止。Luna MAX 偏好保留；能力或映射改變時重新核實，實際委派前才處理必要的新選擇。
+恢復時先核對環境是否仍可用、實際 repo 狀態及既有任務是否已完成。接口、需求或 base revision 改變時，依 [SKILL.md 第 4 節](../SKILL.md) 完成停筆與工具狀態核對，再更新 DAG／contracts／驗收、移交 ownership，並取得新版確認後續做；不能只更新摘要或收到中斷回覆就假設舊 writer 已停止。模型推薦只作計畫；恢復工作時核對實際設定、工具能力和原計畫適用性，必要時更新推薦與證據。

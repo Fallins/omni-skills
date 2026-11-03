@@ -1,0 +1,39 @@
+---
+name: implement-change
+description: 依已批准的範圍與驗收契約實作功能、修復 BUG 或重構，交付可供驗證的變更；不接管大型任務協調。
+---
+
+# 變更實作
+
+用於把已批准、邊界清楚的程式工作轉成可驗證的修改。大型任務的單一整合入口仍由 `large-task-orchestrator` 負責；本技能執行被指派的實作切片，不另建 DAG、派工迴圈或第二位協調者。
+
+## 開始前
+
+1. 讀取有效的 repo／組織規則、任務 brief 與驗收條件。大型切片須使用已 ready 的 [TaskContract](../large-task-orchestrator/references/task-contract.md)，並核對其 revision；輕量工作保留足以避免猜測的短任務卡。
+2. 確認 repo、branch、base revision、實際可寫範圍與工作樹既有修改。保留不屬於本任務的 dirty changes；不還原、不覆蓋、不順手納入。
+3. 盤點要修改的檔案與共享資源，確認每個檔案／區域只有一位 writer。合約、介面、必要授權或已批准設計仍有阻塞時，先交回規劃者，不自行補產品決策。
+4. 檢查專案已有的架構、測試與開發方法。重用適用的本地能力；先核實其實際用途與副作用，不依名稱猜測，也不啟動第二套整體流程。
+
+缺少範圍或驗收時，可先用 `understand-task`／`plan-change` 補足。使用者只要求計畫時停止在計畫，不因本技能被讀取就開始寫檔。
+
+## 選擇實作方式
+
+依任務選用一種主要 playbook，細節見 [change-playbooks.md](references/change-playbooks.md)：
+
+- 新功能：先完成最小垂直切片，再補該需求的錯誤、空值、權限與恢復邊界。
+- BUG：先保留失敗條件與證據，追查根因，修後重跑相同使用者路徑及相關回歸。
+- 重構：先固定可觀察行為與相容性；不得把未批准的產品行為變更包進重構。
+
+有 UI 設計時，只有 Plan 的任務卡（large 時為 TaskContract）引用使用者明確批准的 DesignSpec revision 與實際 approval reference，且依任務大小提供足量映射後，才能開始對應切片：light 在任務卡內精簡列出每個受影響畫面／狀態、互動、實作位置及 UX／Layout acceptance／驗證；large 提供完整 DesignImplementationMap。light 不必另建映射文件，但不可省略上述欄位或漏掉受影響狀態。逐項契約見 [design-to-code playbook](references/design-to-code.md)。若缺少批准或受影響狀態／互動／驗收映射不全，停止該切片並交回唯一規劃／協調 owner。使用者可見差異須返回 Plan，必要時重新交 design-interface 審核；實作者不能代替使用者批准。
+
+## 實作與範圍控制
+
+- 依 repo 架構和已定契約直接修改，先重用既有元件、API、測試及命名方式，不另造框架。
+- 只修改授權範圍。發現共因、額外缺陷、schema／權限影響或共享介面變更時，記錄證據與影響；會改變驗收或下游契約就先停下並交回唯一協調者。
+- 保持每個跨任務介面的輸入、輸出、錯誤、狀態轉移與副作用和契約一致。不得靠放寬 assertion、刪測試或改預期值讓結果變綠。
+- 修改後先做本切片所需的靜態／單元檢查；將完整功能與環境驗收交給 `verify-change`，需求符合與程式風險交給 `review-change`。測試沒跑就明列 not-run。
+- 若開始修改前發現既有 dirty change 會與本任務衝突，保存現況並停止該重疊區域；不要以重置工作樹或猜測 ownership 解決。
+
+## 交付
+
+回報實際修改檔案與版本、每項 acceptance 的對應修改、已跑命令與結果、尚未驗證的範圍、偏離契約、風險及下一步。只有程式修改完成時，標示「ready for verification」或 partial；不把寫完、單一 exit code 或本技能的局部測試稱為整體完成。整體狀態欄位見共用 [CompletionDecision](../../docs/contracts/completion-decision.md)。

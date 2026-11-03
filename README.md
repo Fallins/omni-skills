@@ -40,6 +40,10 @@ chmod +x scripts/install-skills.sh
 
 Bash 安裝器不為 `gs-grill-core` 產生 Cursor slash 檔；Codex／Claude Code 可能仍列出此 skill。它供 `gs-grill-me`／`gs-grill-with-docs` 讀取，不作一般使用入口。
 
+## 路由規則草案
+
+G1 新增的路由草案在 [docs/skill-routing-rule-draft.md](docs/skill-routing-rule-draft.md)，僅供 review，尚未生效。安裝器只連結 skills/ 內的技能；規則草案需在之後的適用層另行審核與安裝，不會因更新 skills 自動生效。
+
 ## 推薦流程
 
 ```
@@ -53,6 +57,8 @@ Bash 安裝器不為 `gs-grill-core` 產生 Cursor slash 檔；Codex／Claude Co
 ```
 
 對話用**繁體中文**。
+
+一般程式變更可依需要組合 `understand-task → plan-change → implement-change → verify-change → review-change`，不用每次跑完整條。UI 變更若有未定設計，流程是 `Plan → design-interface → 使用者審核 → 返回 Plan 更新任務卡／TaskContract 內的實作映射 → implement-change`；light 可把精簡完整映射內嵌任務卡，large 使用完整 DesignImplementationMap；未批准設計不可直接進實作。只要求計畫時在 plan-change 停止；大型 execute 仍以 large-task-orchestrator 作唯一整合入口，coordinate-work 僅提供可重用協調方法，不另建第二套派工／整合流程。
 
 ---
 
@@ -88,7 +94,14 @@ Bash 安裝器不為 `gs-grill-core` 產生 Cursor slash 檔；Codex／Claude Co
 | `frontend-design` | 新 UI、大型視覺調整、設計 polish；強調 typography、composition、hierarchy 與 distinctive design | `/frontend-design` 或「用 frontend-design 設計這個頁面」 |
 | `agent-browser` | 使用真實 browser 做操作、QA、repro、截圖與流程驗證 | `/agent-browser` 或「用 agent-browser 測這個登入流程」 |
 | `systematic-debugging` | 對 concrete failure 做 root-cause-first 除錯，先證明根因再修 | `/systematic-debugging` 或「用 systematic-debugging 查這個 failure」 |
-| `large-task-orchestrator` | 大型程式任務的證據查核、規格拆解、代理分工與整合驗收；保留 Luna MAX 子代理偏好，依環境確認實際模型 | 說「大型任務模式」或使用 `$large-task-orchestrator`（支援 slash 的工具可用 `/large-task-orchestrator`）；只要求規劃時不實作，要執行請明確要求「規劃並執行」。 |
+| understand-task | 查明任務目標、現況證據、範圍與成功條件 | 開始規劃或實作前仍需釐清時使用；簡單問題不強迫跑流程。 |
+| plan-change | 為程式變更建立可驗證計畫，提供 light／large 模式；large 會先核對規劃者實際模型／effort，並可明定在途 I/O、lease、停機與回退契約 | 只要求計畫時用 plan-change；大型 execute 由 large-task-orchestrator 作唯一整合入口。子任務模型推薦另行記錄。 |
+| design-interface | 將 Plan 的 DesignBrief 轉成有 journey、狀態、responsive 規則及分開 UX／Layout acceptance 的 DesignSpec | `/design-interface`；交付指定 revision 給使用者審核；批准後返回 Plan 建實作對照，不直接寫產品程式。 |
+| implement-change | 依已批准契約實作新功能、修復 BUG 或重構，交付 ready-for-verification 變更 | `/implement-change`；大型任務由唯一整合者分配切片，不另建協調流程。 |
+| verify-change | 執行 run、建立 bootstrap、維護 maintain 驗證入口與 FeatureMap，產出綁定版本／環境的 VerificationReceipt | `/verify-change`；按需求選 run、bootstrap 或 maintain；後端依賴可分別驗收真程序、隔離 DB 與必要 NAS。不能以 exit 0 取代語意證據。 |
+| review-change | 依固定 revision 做需求符合與程式風險審查，輸出去重、可追溯 findings | `/review-change`；實作者自查須標 self-review。 |
+| coordinate-work | 使用單一 owner、TaskContract、資源／writer 控制、在途 I/O／lease 停止交接、恢復與最終整合驗收來協調多切片工作 | `/coordinate-work` 僅在明確指定且沒有既有 owner 時作為協調者；large-task-orchestrator 已接手時只引用方法，不開第二套 DAG／台帳／派工。 |
+| large-task-orchestrator | 大型 execute 的單一協調入口，保留停止／移交、單一 writer、整合驗收與恢復保障 | 說「大型任務模式」或使用 $large-task-orchestrator；大型 plan-only 改用 plan-change。可使用實作／驗證／審查階段方法，但不另起 coordinator。 |
 
 除錯分工：
 
