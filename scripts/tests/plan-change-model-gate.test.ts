@@ -26,6 +26,31 @@ test('unmatched or unverifiable planner settings require notice and authorized f
   assert.match(planTemplate, /未獲准 fallback 不開始大型 Plan/);
 });
 
+test('current-session UI reports are scoped evidence, not provider-side proof', () => {
+  assert.match(planChange, /目前負責撰寫 Plan 的規劃者實際配置/);
+  assert.match(planChange, /使用者回報.*同一 session.*UI/);
+  assert.match(planChange, /模型.*effort.*觀察時間/);
+  assert.match(planChange, /UI 選定值證據/);
+  assert.match(planChange, /不代表.*服務端實際執行型號/);
+  assert.match(planChange, /提示詞、技能文字、設定檔預設值、舊 session、子任務推薦.*都不能代替/);
+  assert.match(planChange, /可用上限不可見.*unverifiable/);
+  assert.match(planChange, /同一用戶端與帳號可見的模型及 effort 選項/);
+  assert.match(planChange, /最高 reasoning 選項標示為 Ultra.*子代理/);
+  assert.match(planTemplate, /UI evidence source/);
+  assert.match(planTemplate, /active session/);
+  assert.match(planTemplate, /observed at/);
+  assert.match(planTemplate, /provider-side execution/);
+});
+
+test('fallback requires an explicit task-scoped plan-only grant and does not imply dispatch', () => {
+  assert.match(planChange, /明確.*fallback.*授權/);
+  assert.match(planChange, /這個任務.*session.*provisional.*plan-only/);
+  assert.match(planChange, /沒有明確同意、未回覆或授權範圍含糊時，暫停且不開始研究/);
+  assert.match(planChange, /plan-only.*不授權派工.*實作/);
+  assert.match(planTemplate, /fallback decision scope/);
+  assert.match(orchestrator, /plan-only fallback 不授權派工/);
+});
+
 test('light planning is exempt and child recommendations are separate', () => {
   assert.match(planChange, /此檢查只適用 large/);
   assert.match(planChange, /不強制最高模型或最高思考程度/);

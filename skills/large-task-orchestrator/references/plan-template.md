@@ -9,7 +9,7 @@
 - Repo / revision：實際路徑、base commit、branch、工作樹修改與適用 repo 指引。
 - Capabilities：可用的讀寫／測試／委派工具、並行限制、隔離方案與權限阻礙；執行方式為 delegation、primary-sequential 或 plan-only，記錄選擇依據及使用者是否要求指定代理／模型。
 - Dependency readiness：每個必要套件、服務、工具與 credential 設定的版本／API 相容性、目標環境、owner、available / missing / unknown、查驗方法與證據、所需權限或使用者步驟。credential 只記名稱與狀態，絕不記錄秘密值；建立／配置持續存取依宿主要求另取得確認。
-- PlannerExecutionCheck（large only，在任何實質 Plan 研究前完成）：記錄規劃者所需能力／effort、目前實際模型與 effort、宿主支援上限、可觀察證據來源、能否透過受支援方式指定，以及狀態 matched／mismatch／unverifiable／unavailable。若配置不符或無法核實，記錄使用者通知與本次授權是否允許 fallback；未獲准 fallback 不開始大型 Plan，獲准則標 provisional 並保留限制。記錄 fallback 授權範圍；允許繼續寫 Plan 不等於允許派工。Light 標 not applicable。
+- PlannerExecutionCheck（large only，在任何實質 Plan 研究前完成）：記錄 required capability／effort、同一規劃 session 的 selected model／effort、該帳號／用戶端／workspace 可用最高模型與 effort、能否透過受支援方式指定，以及狀態 matched／mismatch／unverifiable／unavailable。`UI evidence source` 記錄來源（代理直接觀察或使用者回報）、Codex 用戶端、active session 範圍、`observed at` 時間與 UI 原始顯示值；此證據只證明 UI 選定值，不是 provider-side execution 證明。只見設定檔預設值、舊 session、提示詞、子任務推薦或工具接受設定時不算觀察證據。若該 session 的模型／effort 可用上限不可見，記 unknown 並標 unverifiable／unavailable；先告知使用者並查明是否已有明確、適用本任務的 fallback 授權。未獲准 fallback 不開始大型 Plan；如需允許繼續，必須記錄使用者同意及 `fallback decision scope`，plan-only fallback 標 provisional 且不授權派工／實作。允許繼續寫 Plan 不等於允許派工；派工授權須明確涵蓋 fallback。Light 標 not applicable。
 - SubtaskModelAssignments：針對委派角色與子任務列適任能力、推薦模型／思考程度、理由、可接受替代、成本假設及升級條件。監管／整合 writer 推薦同級或略低於大型規劃要求；子任務先看適任，再比較 CP 值。正式委派前查當下可用模型與支援設定，不寫固定偏好或過時品牌排名。每項分開記錄 recommended、requested、tool-accepted、observed；工具不能設定或核實時說明限制，不宣稱已切換。沒有委派任務就標 not applicable。
 - Open startup questions：缺少且影響本輪決策的資訊。large Plan 的規劃者配置必須在研究前核對；若無法達成／核實，先通知並依現有授權決定 fallback 或暫停。子任務模型問題只在準備委派時提出；既有確認不重問，未回覆不視為同意。
 
