@@ -57,9 +57,11 @@ The G1 routing draft lives at [docs/skill-routing-rule-draft.md](docs/skill-rout
 | `systematic-debugging` | Root-cause-first debugging for a concrete, investigable failure | `/systematic-debugging` |
 | understand-task | Ground a task in its goal, evidence, scope and success conditions | Use before planning or implementation when context still needs checking; simple questions do not need the full flow. |
 | plan-change | Produce verifiable light or large plans; large plans verify the planner's actual model/effort before researching same-repo request/bug batches or cross-repo work | Use for plan-only requests. Child-task model recommendations are separate. Large execution uses large-task-orchestrator as its sole integration owner. |
+| design-interface | Turn a Plan DesignBrief into a reviewable DesignSpec with journey, state, responsive, UX and layout acceptance | `/design-interface`; ask the user to review the exact revision, then return to Plan for the implementation map. It does not write product code. |
 | implement-change | Implement an approved feature, bug fix or refactor and hand off a change ready for verification | `/implement-change`; large-task slices are assigned by the existing sole coordinator. |
 | verify-change | Run, bootstrap or maintain a rerunnable verification entry and FeatureMap; produce a version- and environment-bound VerificationReceipt | `/verify-change`; choose run, bootstrap or maintain as needed. Exit 0 alone is not semantic evidence. |
 | review-change | Review a fixed revision for spec compliance and code risk; produce deduplicated, traceable findings | `/review-change`; mark self-review when the implementer reviews their own change. |
+| coordinate-work | Coordinate multi-slice work with one owner, contracts, shared-resource controls, stop/resume handoffs, and final integration acceptance | `/coordinate-work` only when explicitly assigned and no coordinator already owns the task. If large-task-orchestrator is active, use this as a method only; do not open another DAG, ledger, or dispatch loop. |
 | large-task-orchestrator | Sole coordination entry for large execution, retaining stop/handoff, single-writer, integration acceptance and resume safeguards | Say "大型任務模式" or use $large-task-orchestrator. Large plan-only requests use plan-change. It can use stage methods without starting another coordinator. |
 
 Debugging split: `systematic-debugging` when the failure is already stable and the job is finding the root cause. `gs-diagnosing-bugs` when the job is first building a reliable feedback loop (hard-to-reproduce bugs, inconsistent performance).
@@ -77,7 +79,7 @@ At runtime the skill loads `agent-browser skills get core` from the installed CL
 
 Talk to the user in Traditional Chinese.
 
-For a code change, combine only the needed stages: `understand-task → plan-change → implement-change → verify-change → review-change`. A plan-only request stops after plan-change. Large execution keeps `large-task-orchestrator` as its sole integration owner; stage skills do not start another coordination or dispatch loop.
+For a code change, combine only the needed stages: `understand-task → plan-change → implement-change → verify-change → review-change`. For UI work with unresolved design, use `Plan → design-interface → user review → return to Plan to update DesignImplementationMap/TaskContract → implement-change`; do not implement an unapproved design. A plan-only request stops after plan-change. Large execution keeps `large-task-orchestrator` as its sole integration owner; `coordinate-work` is a reusable method and does not start a second dispatch or integration loop.
 
 ## Updating
 

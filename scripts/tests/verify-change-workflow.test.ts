@@ -61,6 +61,9 @@ test('synthetic company adapter composes top-level methods, maps artifacts and d
   assert.match(adapter, /understand-task/);
   assert.match(adapter, /plan-change/);
   assert.match(adapter, /implement-change/);
+  assert.match(adapter, /design-interface/);
+  assert.match(adapter, /DesignImplementationMap/);
+  assert.match(adapter, /coordinate-work/);
   assert.match(adapter, /verify-change/);
   assert.match(adapter, /review-change/);
   assert.match(adapter, /唯一 coordination owner/);

@@ -35,7 +35,7 @@ description: 為程式變更建立可執行、可驗證的計畫；同一技能�
 - 驗證方式、預期結果、回歸範圍。
 - 風險、阻塞與升級條件；沒有則明示。
 
-BUG 計畫包含可取得的修復前失敗證據，以及修後重跑同一路徑的驗收方式。無法重現時標示 static inspection、待驗或 blocked，不編造行為證據。小型 UI 變更若已有精確批准設計就不重做；若仍有外觀或互動決策，交付所需 DesignBrief 並停在審核等待點。
+BUG 計畫包含可取得的修復前失敗證據，以及修後重跑同一路徑的驗收方式。無法重現時標示 static inspection、待驗或 blocked，不編造行為證據。小型 UI 變更若已有精確批准設計，引用 revision／decision 並在任務卡把受影響畫面／狀態及 acceptance 對應至實作位置和驗證，不重做設計；若仍有外觀或互動決策，交付 DesignBrief，經 design-interface 設計與使用者審核，再返回 Plan 更新實作契約。
 
 ## Large：研究先行的完整計畫
 
@@ -76,12 +76,14 @@ BUG 計畫包含可取得的修復前失敗證據，以及修後重跑同一路�
    - 模型推薦與依據、替代、不可降級／升級條件及可核實的實際設定範圍。
    - 回報狀態 done／partial／blocked、實際變更版本、驗證、偏離、阻塞與交接。
    核心設計不能留給較低能力的執行者猜，也不需要預寫大量實作程式碼。
-6. **UI 設計等待點**：有 UI 工作時先交 DesignBrief，含需求 ID、完整 journey、要解決的操作問題、既有元件／系統、狀態、範圍和審核條件。設計獲使用者審核後才返回 Plan 更新實作對照與 TaskContract。G1 尚未提供 design-interface；不得假稱已有批准設計或完成 UI 設計。
+6. **UI 設計等待點**：有尚未定案的 UI／互動工作時，先交 DesignBrief，含需求 ID、完整 journey、操作問題、既有元件／tokens、狀態、邊界及審核條件，再交給 [design-interface](../design-interface/SKILL.md)。需涵蓋返回／前進／取消／重試、資料保留、錯誤恢復；版面需明示容器邊界、頁邊距、內距、群組／區段／欄距、字級／行高、控制尺寸與對齊，並規劃相關窄／中／寬尺寸、長內容和溢位。UXAcceptance（旅程與行為）和 LayoutAcceptance（指定尺寸及量測證據）分開記錄。原型須標出假資料與非功能控制，不算正式產品驗收。
+   - design-interface 產出綁定版本的 DesignSpec，等待使用者明確審核。記錄確切版本與真實決定；不得從沉默或含糊回應推定批准。要求修改時先修訂並再次審核。
+   - 只有使用者批准該版後，才返回本 Plan 建立／更新 DesignImplementationMap，將每個畫面／狀態、互動和 UX／Layout acceptance 對應至原生元件、檔案、資料契約及驗證方式，並更新 TaskContract、依賴與 DAG。未批准設計、未映射狀態或未決產品決定會阻擋受影響的實作。
 7. **委派角色模型推薦**：這裡記錄後續監管／整合 writer 與子任務的推薦，不替代前面的 PlannerExecutionCheck。監管／整合 writer 的推薦能力與大型規劃要求同級或略低一階。每個子任務先按領域推理、上下文、工具／視覺需求、品質與返工風險篩選適任者，再比較 CP 值。高風險 migration、權限、並發或跨 repo 契約不得只因工作範圍小就降階。列首選、effort、理由、可接受替代、不可降級條件與升級條件；資訊不足就推薦能力等級，不寫死品牌或過時價格。
    - 正式委派前查當時可用模型、思考程度、工具能力和價格資料；成本假設需標來源與時間。分開記錄每個子任務的 recommended、requested、tool-accepted、observed 證據。工具不能設定模型／effort 時明示限制；工具接受設定不等於已核實底層型號。推薦不代表已啟動任務、已切換模型或已獲額外授權。
 8. **分開判定完成**：plan-complete 表示全案範圍、研究、架構、依賴、風險、驗收和未決問題均可追溯；ready-to-dispatch 另要求該任務的決策已定、契約可讀、依賴及環境就緒、唯一 owner 明確、驗收可執行。下游被上游阻塞時列解除條件，不標 ready。計畫完成不等於授權實作。
 ## 輸出與唯一流程
 
-按需要把產物合併在同一份文件，不為欄位數量建立多份表。大型輸出至少包含 ResearchCoverage、EvidenceLedger、Decision／ContradictionLedger、ArchitecturePlan、DAG、TaskContracts、ModelAssignmentPlan（含研究前完成的 PlannerExecutionCheck 與分開記錄的委派角色推薦）、AcceptanceMatrix、ResumePack；輕量輸出只保留任務卡必要欄位。依 [Plan 範本](../large-task-orchestrator/references/plan-template.md) 與 [TaskContract](../large-task-orchestrator/references/task-contract.md) 記錄大型細節；兩者是目前過渡期的共用 canonical references，避免新舊流程維護兩套格式。
+按需要把產物合併在同一份文件，不為欄位數量建立多份表。大型輸出至少包含 ResearchCoverage、EvidenceLedger、Decision／ContradictionLedger、ArchitecturePlan、DAG、TaskContracts、ModelAssignmentPlan（含研究前完成的 PlannerExecutionCheck 與分開記錄的委派角色推薦）、AcceptanceMatrix、ResumePack；有未定 UI 時增加 DesignBrief，批准後記錄 DesignSpec revision／approval reference 與 DesignImplementationMap。輕量輸出只保留任務卡必要欄位。依 [Plan 範本](../large-task-orchestrator/references/plan-template.md) 與 [TaskContract](../large-task-orchestrator/references/task-contract.md) 記錄大型細節；兩者是目前過渡期的共用 canonical references，避免新舊流程維護兩套格式。
 
 大型 execute 暫由既有 large-task-orchestrator 作為唯一整合入口；若本計畫之後交給它，附上本計畫 revision 與證據範圍，讓它核對新鮮度後沿用，不另開第二位 planner。只要求計畫時不啟動該協調流程。小任務也不因拆解有多個步驟就自動增加代理。完成後交付計畫狀態、ready／blocked 任務、未解決事項與下一個安全步驟。

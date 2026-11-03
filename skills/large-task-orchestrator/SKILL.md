@@ -40,7 +40,7 @@ description: 大型程式任務的證據查核、可行性分析、細粒度規�
 
 只有在使用者的任務授權涵蓋執行、本任務的分析確認關卡已通過、前置依賴已就緒時，才啟動實作；實際委派另須確認模型設定。主代理循序執行沿用相同合約、台帳與驗收要求。
 
-每個實作切片可沿用 [implement-change](../implement-change/SKILL.md) 的新功能／BUG／重構方法；驗證沿用 [verify-change](../verify-change/SKILL.md) 並保存 VerificationReceipt；規格符合與程式風險審查沿用 [review-change](../review-change/SKILL.md)。這些是階段方法，不是新的整案協調入口：本技能仍是唯一 coordinator，保留停止／移交、writer ownership、review 排程與主代理最終整合驗收，不再啟動重複 DAG 或派工流程。
+每個實作切片可沿用 [implement-change](../implement-change/SKILL.md) 的新功能／BUG／重構及設計到程式 playbook；驗證沿用 [verify-change](../verify-change/SKILL.md) 並保存 VerificationReceipt；規格符合與程式風險審查沿用 [review-change](../review-change/SKILL.md)。[coordinate-work](../coordinate-work/SKILL.md) 是可重用的生命週期方法，不是第二個整案協調入口：本技能仍是唯一 coordinator，保留停止／移交、writer ownership、review 排程與主代理最終整合驗收，不再啟動重複 DAG、任務台帳或派工流程。設計批准後回 Plan 更新 DesignImplementationMap 與 TaskContract，再按版次實作；不得略過使用者審核直接從原型寫程式。
 
 1. 每次分派給子代理完整 task contract、必要來源與 repo 指引、base revision、相關使用者指示，以及回報格式；不要假設它能看到父代理對話。主代理持續維護唯一任務台帳與 ownership 表。
 2. 子代理只修改自己負責範圍。發現接口不成立、需要越界寫入或依賴改變時，停止受影響寫入並回報，不能自行擴張範圍。合約改版、取消或更換 owner 時，由主代理依序執行：
