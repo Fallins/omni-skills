@@ -22,15 +22,20 @@ test('design flow requires explicit revision approval and returns to Plan before
   assert.match(designContract, /DesignBrief/);
   assert.match(designContract, /DesignSpec/);
   assert.match(designContract, /DesignImplementationMap/);
+  assert.match(designContract, /do not require a separate document/);
   assert.match(designContract, /real user decision reference/);
   assert.match(designContract, /silence/);
   assert.match(designer, /approve or request changes to the exact revision/i);
   assert.match(designer, /return to Plan/i);
   assert.match(planner, /design-interface/);
-  assert.match(planner, /小型 UI 變更若已有精確批准設計，引用 revision／decision/);
-  assert.match(planner, /返回本 Plan 建立／更新 DesignImplementationMap/);
-  assert.match(implementer, /使用者明確批准的 DesignSpec revision/);
+  assert.match(planner, /小型 UI 變更若已有精確批准設計，引用 DesignSpec revision／實際使用者決定/);
+  assert.match(planner, /不強制另建 DesignImplementationMap 文件/);
+  assert.match(planner, /返回本 Plan 建立／更新實作映射/);
+  assert.match(implementer, /Plan 的任務卡（large 時為 TaskContract）引用使用者明確批准的 DesignSpec revision/);
+  assert.match(implementer, /light 不必另建映射文件/);
   assert.match(designToCode, /approval/);
+  assert.match(designToCode, /light work, a concise inline task-card map \(no separate document required\)/);
+  assert.match(designToCode, /large work, the complete DesignImplementationMap/);
   assert.match(readmeZh, /Plan → design-interface → 使用者審核/);
   assert.match(readmeEn, /Plan → design-interface → user review/);
   assert.match(adapter, /使用者審核 → 返回 Plan 更新 map／TaskContract/);
@@ -56,44 +61,100 @@ test('design acceptance covers journey, recovery, geometry, responsive content, 
   assert.match(designer, /real-user/i);
 });
 
-function implementationGate({ spec, plan, map }) {
+function implementationGate({ spec, plan, mode }) {
   if (spec.status !== 'approved' || !spec.approval_ref) throw new Error('approval-required');
-  if (plan.design_revision !== spec.revision || map.design_revision !== spec.revision) throw new Error('revision-mismatch');
-  const mapped = new Set(map.entries.map((entry) => entry.screen_state));
+  const map = mode === 'light' ? plan.task_card?.design_mapping : plan.design_implementation_map;
+  if (!map) throw new Error('mapping-required');
+  if (mode === 'light' && map.location !== 'task-card') throw new Error('inline-map-required');
+  if (mode === 'large' && map.coverage !== 'complete') throw new Error('complete-map-required');
+  if (plan.design_revision !== spec.revision || map.design_revision !== spec.revision || map.approval_ref !== spec.approval_ref) throw new Error('revision-mismatch');
+  const mapped = new Map(map.entries.map((entry) => [entry.screen_state, entry]));
   for (const screenState of spec.required_screen_states) {
-    if (!mapped.has(screenState)) throw new Error(`unmapped:${screenState}`);
+    const entry = mapped.get(screenState);
+    if (!entry) throw new Error(`unmapped:${screenState}`);
+    if (!entry.interaction || !entry.implementation_location || !entry.ux_acceptance || !entry.layout_acceptance || !entry.verification) {
+      throw new Error(`incomplete-entry:${screenState}`);
+    }
+    if (mode === 'large' && (!entry.owner || !entry.data_api || !entry.integration_task)) {
+      throw new Error(`incomplete-large-entry:${screenState}`);
+    }
   }
-  if (!map.ux_acceptance_ref || !map.layout_acceptance_ref) throw new Error('acceptance-map-required');
   return 'ready';
 }
 
-const approvedFixture = () => ({
-  spec: { status: 'approved', revision: 'design-r3', approval_ref: 'decision-fixture-7', required_screen_states: ['form:empty', 'form:error', 'form:success'] },
-  plan: { design_revision: 'design-r3' },
-  map: {
+const approvedFixture = (mode = 'light') => {
+  const entries = ['form:empty', 'form:error', 'form:success'].map((screen_state) => ({
+    screen_state,
+    interaction: `interaction-${screen_state}`,
+    implementation_location: 'src/FormPanel.tsx',
+    ux_acceptance: `ux-${screen_state}`,
+    layout_acceptance: `layout-${screen_state}`,
+    verification: `verify-${screen_state}`,
+    owner: 'T-form',
+    data_api: 'FormViewModel',
+    integration_task: 'T-integrate',
+  }));
+  const mapping = {
     design_revision: 'design-r3',
-    entries: ['form:empty', 'form:error', 'form:success'].map((screen_state) => ({ screen_state, component: `native-${screen_state}` })),
-    ux_acceptance_ref: 'ux-fixture-v1',
-    layout_acceptance_ref: 'layout-fixture-v1',
-  },
-});
+    approval_ref: 'decision-fixture-7',
+    location: mode === 'light' ? 'task-card' : 'plan',
+    coverage: mode === 'large' ? 'complete' : 'scoped',
+    entries,
+  };
+  const plan = { design_revision: 'design-r3' };
+  if (mode === 'light') plan.task_card = { design_mapping: mapping };
+  else plan.design_implementation_map = mapping;
+  return {
+    spec: { status: 'approved', revision: 'design-r3', approval_ref: 'decision-fixture-7', required_screen_states: ['form:empty', 'form:error', 'form:success'] },
+    plan,
+    mode,
+  };
+};
 
-test('synthetic design handoff blocks missing approval, stale revisions, and unmapped states', () => {
-  const complete = approvedFixture();
-  assert.equal(implementationGate(complete), 'ready');
+test('synthetic handoff allows inline light mapping and requires a complete large map without gaps', () => {
+  const light = approvedFixture('light');
+  assert.equal('design_implementation_map' in light.plan, false);
+  assert.equal(implementationGate(light), 'ready');
 
-  const unapproved = approvedFixture();
+  const large = approvedFixture('large');
+  assert.equal(implementationGate(large), 'ready');
+
+  const incompleteLarge = approvedFixture('large');
+  incompleteLarge.plan.design_implementation_map.coverage = 'scoped';
+  assert.throws(() => implementationGate(incompleteLarge), /complete-map-required/);
+
+  const missingMapping = approvedFixture('light');
+  delete missingMapping.plan.task_card.design_mapping;
+  assert.throws(() => implementationGate(missingMapping), /mapping-required/);
+
+  const unapproved = approvedFixture('light');
   unapproved.spec.status = 'awaiting-review';
   unapproved.spec.approval_ref = '';
   assert.throws(() => implementationGate(unapproved), /approval-required/);
 
-  const stale = approvedFixture();
+  const stale = approvedFixture('light');
   stale.plan.design_revision = 'design-r2';
   assert.throws(() => implementationGate(stale), /revision-mismatch/);
 
-  const incomplete = approvedFixture();
-  incomplete.map.entries.pop();
+  const incomplete = approvedFixture('light');
+  incomplete.plan.task_card.design_mapping.entries.pop();
   assert.throws(() => implementationGate(incomplete), /unmapped:form:success/);
+
+  const missingAcceptance = approvedFixture('light');
+  missingAcceptance.plan.task_card.design_mapping.entries[0].layout_acceptance = '';
+  assert.throws(() => implementationGate(missingAcceptance), /incomplete-entry:form:empty/);
+
+  const missingInteraction = approvedFixture('light');
+  missingInteraction.plan.task_card.design_mapping.entries[1].interaction = '';
+  assert.throws(() => implementationGate(missingInteraction), /incomplete-entry:form:error/);
+
+  const missingImplementation = approvedFixture('light');
+  missingImplementation.plan.task_card.design_mapping.entries[2].implementation_location = '';
+  assert.throws(() => implementationGate(missingImplementation), /incomplete-entry:form:success/);
+
+  const incompleteLargeEntry = approvedFixture('large');
+  delete incompleteLargeEntry.plan.design_implementation_map.entries[0].owner;
+  assert.throws(() => implementationGate(incompleteLargeEntry), /incomplete-large-entry:form:empty/);
 });
 
 function mayTransferWriter({ stopConfirmed, inFlightIO }) {

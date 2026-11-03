@@ -2,14 +2,14 @@
 
 Use this playbook only for a UI slice with a user-approved design. It composes with the shared [design workflow contract](../../../docs/contracts/design-workflow.md); it does not create a second planning or coordination process.
 
-## Gate: approved design and mapped work
+## Gate: approved design and size-appropriate mapping
 
-Before writing, verify that the Plan and TaskContract identify:
+Before writing, verify that the Plan/task card (using the TaskContract for large work) identifies:
 
 - the exact DesignSpec revision and a reference to the user's actual approval, including any conditions;
-- a DesignImplementationMap mapping every in-scope screen, state, interaction, UXAcceptance, and LayoutAcceptance to native components/files, APIs/data, and verification evidence;
+- a mapping at the right scale: for light work, a concise inline task-card map (no separate document required); for large work, the complete DesignImplementationMap in the Plan/TaskContract;
 - current repo architecture, tokens, component APIs, owned files, and shared-resource writer; new paths/APIs are marked proposed until verified;
-- unresolved decisions, dependencies, and acceptance. Missing approval or a material gap blocks the affected slice and returns to Plan; the implementer does not fill product decisions by guesswork.
+- every affected screen/state and interaction mapped to an implementation location, with UXAcceptance and LayoutAcceptance kept distinct and each tied to verification evidence; unresolved decisions, dependencies, and acceptance. Missing approval or any missing affected state/interaction/implementation/acceptance entry blocks that slice and returns to Plan; the implementer does not fill product decisions by guesswork.
 
 ## Implement the mapped behavior
 

@@ -58,7 +58,7 @@ G1 新增的路由草案在 [docs/skill-routing-rule-draft.md](docs/skill-routin
 
 對話用**繁體中文**。
 
-一般程式變更可依需要組合 `understand-task → plan-change → implement-change → verify-change → review-change`，不用每次跑完整條。UI 變更若有未定設計，流程是 `Plan → design-interface → 使用者審核 → 返回 Plan 更新 DesignImplementationMap／TaskContract → implement-change`；未批准設計不可直接進實作。只要求計畫時在 plan-change 停止；大型 execute 仍以 large-task-orchestrator 作唯一整合入口，coordinate-work 僅提供可重用協調方法，不另建第二套派工／整合流程。
+一般程式變更可依需要組合 `understand-task → plan-change → implement-change → verify-change → review-change`，不用每次跑完整條。UI 變更若有未定設計，流程是 `Plan → design-interface → 使用者審核 → 返回 Plan 更新任務卡／TaskContract 內的實作映射 → implement-change`；light 可把精簡完整映射內嵌任務卡，large 使用完整 DesignImplementationMap；未批准設計不可直接進實作。只要求計畫時在 plan-change 停止；大型 execute 仍以 large-task-orchestrator 作唯一整合入口，coordinate-work 僅提供可重用協調方法，不另建第二套派工／整合流程。
 
 ---
 

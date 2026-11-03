@@ -30,7 +30,12 @@ Approval is a user decision, not an agent-generated status. Save the decision re
 
 ## DesignImplementationMap (approved design → code)
 
-Only after approval, Plan maps each approved screen/state and acceptance criterion to the owning native component/file, data/API contract, interaction, test/verification method, and owner. Reference the exact DesignSpec revision and approval evidence. Unmapped states or unresolved product decisions block the affected implementation slice. If code reveals a material mismatch, stop that slice and route the change through Plan and, when user-visible design changes, another user review.
+After approval, Plan must map the affected design to implementation before coding. The map is a required contract, but its form scales with the task:
+
+- **Light:** embed a concise mapping in the task card; do not require a separate document. Cite the exact approved DesignSpec revision and actual user-decision reference. Cover every in-scope screen/state and interaction, its native component/file or verified implementation location, separate UXAcceptance and LayoutAcceptance criteria, and the verification method.
+- **Large:** include a complete DesignImplementationMap in the Plan/TaskContracts. Map every approved screen/state and acceptance criterion to its owner, native component/file, data/API contract, interaction, verification method, and integration task. Keep the mapping tied to the exact approved DesignSpec revision and decision evidence.
+
+Both forms must account for every affected state and acceptance criterion; task size changes the level of documentation, not coverage. Missing approval, a missing state/interaction/implementation location, or either acceptance track blocks the affected slice. If code reveals a material mismatch, stop that slice and route the change through Plan and, when user-visible design changes, another user review.
 
 ## Acceptance boundary
 

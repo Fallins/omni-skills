@@ -9,7 +9,7 @@
 - `scope`: 虛構的單一產品 repo 與一般功能／BUG 工作
 - `owner`: 本次 adapter invocation 的唯一 coordination owner
 - `inputs`: 使用者需求、repo 規則位置、可取得的程式和測試證據
-- `outputs`: TaskBrief／TaskContract、需要時的 DesignSpec／DesignImplementationMap、程式差異、VerificationReceipt、ReviewFindings 與 coverage
+- `outputs`: TaskBrief／TaskContract、需要時的 DesignSpec／實作映射（light 內嵌任務卡；large 使用完整 DesignImplementationMap）、程式差異、VerificationReceipt、ReviewFindings 與 coverage
 
 ### 組合方法
 
@@ -17,7 +17,7 @@
 |---|---|---|---|
 | 理解 | `understand-task` | `Fictional Request Card`（僅範例名稱） | 本地 request ID ↔ TaskBrief 需求與證據來源 |
 | 規劃 | `plan-change` | `Fictional Acceptance Index`（僅範例名稱） | 本地 acceptance ID ↔ TaskContract acceptance／FeatureMap ID |
-| 設計（有未定 UI 時） | `design-interface` | `Fictional Design Review`（僅範例名稱） | exact DesignSpec revision／實際使用者決定 ↔ 返回 Plan 的 DesignImplementationMap；UXAcceptance 與 LayoutAcceptance 分開 |
+| 設計（有未定 UI 時） | `design-interface` | `Fictional Design Review`（僅範例名稱） | exact DesignSpec revision／實際使用者決定 ↔ 返回 Plan 的映射（light 內嵌任務卡；large 完整 DesignImplementationMap）；UXAcceptance 與 LayoutAcceptance 分開 |
 | 實作 | `implement-change` | `Fictional Component Notes`（僅範例名稱） | approved TaskContract 與 DesignSpec revision／map（如適用）↔ 修改檔案與回報 |
 | 驗證 | `verify-change` | `Fictional Test Entry`（僅範例名稱） | 執行結果與原始輸出 ↔ VerificationReceipt checks／evidence |
 | 審查 | `review-change` | `Fictional Change Summary`（僅範例名稱） | 本地 finding ID ↔ ReviewFinding 的 revision、位置、證據與回歸驗收 |

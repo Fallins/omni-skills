@@ -79,7 +79,7 @@ At runtime the skill loads `agent-browser skills get core` from the installed CL
 
 Talk to the user in Traditional Chinese.
 
-For a code change, combine only the needed stages: `understand-task → plan-change → implement-change → verify-change → review-change`. For UI work with unresolved design, use `Plan → design-interface → user review → return to Plan to update DesignImplementationMap/TaskContract → implement-change`; do not implement an unapproved design. A plan-only request stops after plan-change. Large execution keeps `large-task-orchestrator` as its sole integration owner; `coordinate-work` is a reusable method and does not start a second dispatch or integration loop.
+For a code change, combine only the needed stages: `understand-task → plan-change → implement-change → verify-change → review-change`. For UI work with unresolved design, use `Plan → design-interface → user review → return to Plan to update the task card/TaskContract implementation map → implement-change`; light work may keep its concise complete map in the task card, while large work uses the full DesignImplementationMap. Do not implement an unapproved design. A plan-only request stops after plan-change. Large execution keeps `large-task-orchestrator` as its sole integration owner; `coordinate-work` is a reusable method and does not start a second dispatch or integration loop.
 
 ## Updating
 

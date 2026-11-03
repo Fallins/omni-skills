@@ -24,7 +24,7 @@ description: 依已批准的範圍與驗收契約實作功能、修復 BUG 或�
 - BUG：先保留失敗條件與證據，追查根因，修後重跑相同使用者路徑及相關回歸。
 - 重構：先固定可觀察行為與相容性；不得把未批准的產品行為變更包進重構。
 
-有 UI 設計時，只有 Plan 已引用使用者明確批准的 DesignSpec revision、approval reference，且提供完整 DesignImplementationMap 後，才能開始對應切片；逐項契約見 [design-to-code playbook](references/design-to-code.md)。若缺少批准、畫面／狀態／acceptance 對照不全或設計與程式契約衝突，停止受影響修改並交回唯一規劃／協調 owner。使用者可見差異須返回 Plan，必要時重新交 design-interface 審核；實作者不能代替使用者批准。
+有 UI 設計時，只有 Plan 的任務卡（large 時為 TaskContract）引用使用者明確批准的 DesignSpec revision 與實際 approval reference，且依任務大小提供足量映射後，才能開始對應切片：light 在任務卡內精簡列出每個受影響畫面／狀態、互動、實作位置及 UX／Layout acceptance／驗證；large 提供完整 DesignImplementationMap。light 不必另建映射文件，但不可省略上述欄位或漏掉受影響狀態。逐項契約見 [design-to-code playbook](references/design-to-code.md)。若缺少批准或受影響狀態／互動／驗收映射不全，停止該切片並交回唯一規劃／協調 owner。使用者可見差異須返回 Plan，必要時重新交 design-interface 審核；實作者不能代替使用者批准。
 
 ## 實作與範圍控制
 
