@@ -9,9 +9,9 @@
 - Repo / revision：實際路徑、base commit、branch、工作樹修改與適用 repo 指引。
 - Capabilities：可用的讀寫／測試／委派工具、並行限制、隔離方案與權限阻礙；執行方式為 delegation、primary-sequential 或 plan-only，記錄選擇依據及使用者是否要求指定代理／模型。
 - Dependency readiness：每個必要套件、服務、工具與 credential 設定的版本／API 相容性、目標環境、owner、available / missing / unknown、查驗方法與證據、所需權限或使用者步驟。credential 只記名稱與狀態，絕不記錄秘密值；建立／配置持續存取依宿主要求另取得確認。
-- PlannerExecutionCheck（large only，在任何實質 Plan 研究前完成）：記錄 required capability／effort、同一規劃 session 的 selected model／effort、該帳號／用戶端／workspace 可用最高模型與 effort、能否透過受支援方式指定，以及狀態 matched／mismatch／unverifiable／unavailable。`UI evidence source` 記錄來源（代理直接觀察或使用者回報）、Codex 用戶端、active session 範圍、`observed at` 時間與 UI 原始顯示值；此證據只證明 UI 選定值，不是 provider-side execution 證明。只見設定檔預設值、舊 session、提示詞、子任務推薦或工具接受設定時不算觀察證據。若該 session 的模型／effort 可用上限不可見，記 unknown 並標 unverifiable／unavailable；先告知使用者並查明是否已有明確、適用本任務的 fallback 授權。未獲准 fallback 不開始大型 Plan；如需允許繼續，必須記錄使用者同意及 `fallback decision scope`，plan-only fallback 標 provisional 且不授權派工／實作。允許繼續寫 Plan 不等於允許派工；派工授權須明確涵蓋 fallback。Light 標 not applicable。
-- SubtaskModelAssignments：針對委派角色與子任務列適任能力、推薦模型／思考程度、理由、可接受替代、成本假設及升級條件。監管／整合 writer 推薦同級或略低於大型規劃要求；子任務先看適任，再比較 CP 值。正式委派前查當下可用模型與支援設定，不寫固定偏好或過時品牌排名。每項分開記錄 recommended、requested、tool-accepted、observed；工具不能設定或核實時說明限制，不宣稱已切換。沒有委派任務就標 not applicable。
-- Open startup questions：缺少且影響本輪決策的資訊。large Plan 的規劃者配置必須在研究前核對；若無法達成／核實，先通知並依現有授權決定 fallback 或暫停。子任務模型問題只在準備委派時提出；既有確認不重問，未回覆不視為同意。
+- PlannerExecutionCheck（large only，配置紀錄，不阻擋研究）：主規劃 agent 直接沿用使用者在目前 session UI 選定的模型與 effort，不自動切換或要求最高配置。不為此紀錄詢問精確型號、可用上限或 Ultra 額外許可。宿主已有可觀察值或使用者主動提供時，可記 selected model／effort、`UI evidence source`、active session 範圍與 `observed at`；這是 UI 選定值，不是 provider-side execution 證明。設定檔預設值、舊 session、提示詞、子任務推薦或工具接受設定不可冒充觀察證據。不可觀測時記 unknown／not observable；可用上限無須另查，不因此阻塞、要求 fallback 或標 provisional。既有 Plan 不因缺少此配置證據而需要重規劃或失去 ready 狀態。這不授權另行啟動或委派任務，也不擴大 plan-only／execute 範圍。Light 標 not applicable。
+- SubtaskModelAssignments：針對委派角色與子任務列適任能力、推薦模型／思考程度、理由、可接受替代、成本假設及升級條件。監管／整合 writer 推薦以任務所需的規劃／整合能力為基準，同級或略低一階，不以主規劃 UI 選定型號／effort 代替能力需求；子任務先看適任，再比較 CP 值。正式委派前查當下可用模型與支援設定，不寫固定偏好或過時品牌排名。每項分開記錄 recommended、requested、tool-accepted、observed；工具不能設定或核實時說明限制，不宣稱已切換。沒有委派任務就標 not applicable。
+- Open startup questions：缺少且影響本輪決策的資訊。主規劃沿用 UI 選定配置，不詢問精確型號、可用上限或 Ultra 額外許可，不把配置不可觀測當作啟動問題。子任務模型與必要許可只在準備委派時，依使用者授權與宿主規則確認；既有確認不重問，未回覆不視為同意。
 
 ## 2. 需求與來源查核
 
@@ -60,7 +60,7 @@ Risk spike S-ID：
 
 ## 5. 執行台帳與整合驗收
 
-每項任務記錄 owner、實際模型／effort 的可驗證設定、狀態、base revision、合約版本、交付產物、測試證據、審查問題、重試次數及下一步。改版／移交另記 stop-requested 與 stop-confirmed、代理及工具停止寫入的證據、保存的 diff／產物、新版確認及 ownership 移交；無法確認停止時維持 blocked。晚到舊版成果標 stale，記錄是否經新版核對後採用。
+每項任務記錄 owner、模型／effort 的可觀察設定（不可觀測則記 unknown，不冒充已核實）、狀態、base revision、合約版本、交付產物、測試證據、審查問題、重試次數及下一步。改版／移交另記 stop-requested 與 stop-confirmed、代理及工具停止寫入的證據、保存的 diff／產物、新版確認及 ownership 移交；無法確認停止時維持 blocked。晚到舊版成果標 stale，記錄是否經新版核對後採用。
 
 狀態可用：planned → ready → running → implemented → spec-reviewed → code-reviewed → integrated → verified。blocked / partial 保留原因；修正或 rebase 後受影響的審查與測試需重新評估。
 
@@ -78,4 +78,4 @@ Risk spike S-ID：
 - blocking contradictions、待回覆問題、已試過的失敗及重試預算。
 - 下一個安全動作、所需前提與停止條件。
 
-恢復時先核對環境是否仍可用、實際 repo 狀態及既有任務是否已完成。接口、需求或 base revision 改變時，依 [SKILL.md 第 4 節](../SKILL.md) 完成停筆與工具狀態核對，再更新 DAG／contracts／驗收、移交 ownership，並取得新版確認後續做；不能只更新摘要或收到中斷回覆就假設舊 writer 已停止。模型推薦只作計畫；恢復工作時核對實際設定、工具能力和原計畫適用性，必要時更新推薦與證據。
+恢復時先核對環境是否仍可用、實際 repo 狀態及既有任務是否已完成。接口、需求或 base revision 改變時，依 [SKILL.md 第 4 節](../SKILL.md) 完成停筆與工具狀態核對，再更新 DAG／contracts／驗收、移交 ownership，並取得新版確認後續做；不能只更新摘要或收到中斷回覆就假設舊 writer 已停止。模型推薦只作計畫；恢復委派工作時依使用者要求與宿主規則核對所需設定、必要許可、工具能力和原計畫適用性，必要時更新推薦與證據。主規劃 session 仍直接沿用目前 UI 選定值，不因配置不可觀測而要求補證或阻擋研究。

@@ -41,18 +41,17 @@ BUG 計畫包含可取得的修復前失敗證據，以及修後重跑同一路�
 
 大型不限跨 repo；同 repo 多需求／BUG 的整批規劃同樣適用。先查核足以影響需求、方案、拆分、接口、風險和驗收的資料，再形成方案。研究範圍受本次授權、工具與 repo 範圍限制，不掃描無關私人資料。
 
-### 規劃者配置閘門（large 專用，先於研究）
+### 規劃者配置紀錄（large 專用，不設開工閘門）
 
-大型 Plan 開始實質研究、方案分析或撰寫前，先完成 PlannerExecutionCheck。這是核對目前負責撰寫 Plan 的規劃者實際配置：在此 session 選定的模型與 effort，不是推薦給之後子任務的模型清單。
+PlannerExecutionCheck 只記錄目前主規劃 session 的選定配置與可觀察限制，不是最高配置檢查，也不是大型研究的開始條件。
 
-1. 根據任務需要與宿主目前支援，確定規劃者所需能力：最高適任模型及該環境支援的最高思考程度。
-2. 用宿主可觀察的模型／effort 資訊或支援的設定介面，核對目前實際模型與 effort（即目前規劃 session 顯示的選定值），以及該帳號、用戶端和 workspace 可用上限。若代理無法直接讀取介面，可請使用者回報**目前正在規劃的同一 session** UI 顯示的精確模型與 effort；記錄用戶端、session 範圍、模型與 effort 的觀察時間、原始顯示值及證據來源。這是該 session 的 UI 選定值證據，不代表已獨立驗證服務端實際執行型號。提示詞、技能文字、設定檔預設值、舊 session、子任務推薦或「已點選／工具接受」都不能代替目前 session 的可觀察選定值。
-3. 以同一用戶端與帳號可見的模型及 effort 選項，核對最高適任模型與其最高支援思考程度；記錄選項來源與時間。若最高模型或 effort 可用上限不可見，記為 unknown，PlannerExecutionCheck 狀態為 unverifiable／unavailable，不得推定已達最高。一般文件中的模型目錄或其他帳號、用戶端、workspace 的選項不能證明本 session 的上限。若最高 reasoning 選項標示為 Ultra，另記其會使用子代理的模式特性；未授權該代理工作時，不可默默降為較低 effort 並稱為最高，應阻塞並取得決定。
-4. 若配置低於要求且宿主可指定模型／effort，只能透過受支援且獲准的方式調整，並在開始 Plan 前重新觀察同一 session 的 UI 選定值與可用上限。工具接受設定不等於已觀察到 session 選定值；介面顯示值也不應被描述成服務端證明。
-5. 若無法達到或核實要求，必須在大型研究開始前告知使用者實際限制、未知／不符的具體項目及影響。只有本次有效授權及宿主規則明確允許在該限制下繼續，才可採 fallback；不得把執行任務的一般同意推定為接受未知或較低配置。若授權未明確涵蓋此 fallback，先詢問是否允許**這個任務**在目前 session／配置下產出 provisional、plan-only 計畫；需記錄使用者明確同意及其範圍。沒有明確同意、未回覆或授權範圍含糊時，暫停且不開始研究。獲准 fallback 時，Plan 標為 provisional，記錄模型／effort／上限哪些未知或不符及其影響，不宣稱符合最高配置。plan-only fallback 不授權派工、實作或啟動子代理；只有授權明確涵蓋該 fallback 下的派工時，才可另行通過 ready-to-dispatch。允許繼續寫 Plan 不等於允許派工。
-6. 不可先由較低或未知配置完成大型 Plan，再於結果中補寫「建議使用最高模型」當作滿足此閘門。
+1. 主規劃 agent 直接沿用使用者在目前 session UI 選定的模型與 effort，不自動切換、升級或降級。使用者選定 Ultra 時也直接沿用，不為該選項另取許可。
+2. 不為本項紀錄詢問精確型號、可用上限或 Ultra 額外許可。若模型／effort 不可觀測，記為 unknown／not observable；可用上限無須另查。不可觀測不阻擋已授權的研究或計畫，不要求 fallback，也不因此將計畫標為 provisional。
+3. 宿主已提供目前 session 的可觀察值時，可記錄 selected model／effort、來源與觀察時間；使用者主動提供同一 session 的 UI 顯示值時也可記錄。這只是 UI 選定值證據，不代表已獨立驗證服務端實際執行型號。提示詞、技能文字、設定檔預設值、舊 session、子任務推薦或工具接受設定，不可冒充目前 session 的觀察證據；無資料時如實保留 unknown，不要求使用者補證。
+4. 不要求主規劃者達到最高適任模型或最高思考程度，也不宣稱已達最高。既有 Plan 不因缺少模型／effort 或上限證據而需要重寫、補授權或失去 ready 狀態；仍按需求、證據新鮮度、契約、依賴、風險與驗收判定計畫及派工是否就緒。
+5. 本項只適用目前主規劃 session，不替代後續子任務的模型選擇與確認，也不授權另行啟動或委派任務。實際委派仍依本次使用者授權與宿主規則確認所需模型設定及必要許可；主規劃 UI 選定值不能代替這些確認或授權。只要求 plan-only 時仍在交付計畫後停止。
 
-此檢查只適用 large。Light 依任務需要選擇適任能力，不強制最高模型或最高思考程度。
+此紀錄只適用 large。Light 依任務需要選擇適任能力，不強制最高模型或最高思考程度。
 
 1. **研究覆蓋**：列出需求文件、repo 指引、入口與呼叫鏈、schema／migration、測試／fixtures、設計系統、部署與執行環境、舊 review、已知缺口及外部依賴等適用來源。逐項標 read、unavailable 或 not-applicable，附版本／commit、查核時間、方法與影響。追到會改變計畫的資料流與邊界；README 或搜尋片段不足以證明全貌。
    - 為必要套件、服務、工具和非秘密設定建立 dependency-readiness inventory：版本／API 相容性、目標環境、owner、available／missing／unknown、查核證據及所需使用者動作。憑證只記設定名稱與狀態，不記秘密值；建立持續存取仍依有效宿主規則。
@@ -80,11 +79,11 @@ BUG 計畫包含可取得的修復前失敗證據，以及修後重跑同一路�
 6. **UI 設計等待點**：有尚未定案的 UI／互動工作時，先交 DesignBrief，含需求 ID、完整 journey、操作問題、既有元件／tokens、狀態、邊界及審核條件，再交給 [design-interface](../design-interface/SKILL.md)。需涵蓋返回／前進／取消／重試、資料保留、錯誤恢復；版面需明示容器邊界、頁邊距、內距、群組／區段／欄距、字級／行高、控制尺寸與對齊，並規劃相關窄／中／寬尺寸、長內容和溢位。UXAcceptance（旅程與行為）和 LayoutAcceptance（指定尺寸及量測證據）分開記錄。原型須標出假資料與非功能控制，不算正式產品驗收。
    - design-interface 產出綁定版本的 DesignSpec，等待使用者明確審核。記錄確切版本與真實決定；不得從沉默或含糊回應推定批准。要求修改時先修訂並再次審核。
    - 只有使用者批准該版後，才返回本 Plan 建立／更新實作映射並更新 TaskContract、依賴與 DAG。大型工作需完整 DesignImplementationMap，逐項對應畫面／狀態、互動、原生元件／檔案、資料契約、UX／Layout acceptance、驗證方式與 owner；輕量工作可把同等必要欄位精簡內嵌於任務卡，不另建文件。任一規模都不可漏掉受影響的狀態或 acceptance；未批准設計、映射缺口或未決產品決定會阻擋受影響的實作。
-7. **委派角色模型推薦**：這裡記錄後續監管／整合 writer 與子任務的推薦，不替代前面的 PlannerExecutionCheck。監管／整合 writer 的推薦能力與大型規劃要求同級或略低一階。每個子任務先按領域推理、上下文、工具／視覺需求、品質與返工風險篩選適任者，再比較 CP 值。高風險 migration、權限、並發或跨 repo 契約不得只因工作範圍小就降階。列首選、effort、理由、可接受替代、不可降級條件與升級條件；資訊不足就推薦能力等級，不寫死品牌或過時價格。
+7. **委派角色模型推薦**：這裡記錄後續監管／整合 writer 與子任務的推薦，與前面的 PlannerExecutionCheck 分開。監管／整合 writer 的推薦能力以任務所需的規劃／整合能力為基準，同級或略低一階；不把主規劃 UI 選定型號／effort 當作子任務的能力要求。每個子任務先按領域推理、上下文、工具／視覺需求、品質與返工風險篩選適任者，再比較 CP 值。高風險 migration、權限、並發或跨 repo 契約不得只因工作範圍小就降階。列首選、effort、理由、可接受替代、不可降級條件與升級條件；資訊不足就推薦能力等級，不寫死品牌或過時價格。
    - 正式委派前查當時可用模型、思考程度、工具能力和價格資料；成本假設需標來源與時間。分開記錄每個子任務的 recommended、requested、tool-accepted、observed 證據。工具不能設定模型／effort 時明示限制；工具接受設定不等於已核實底層型號。推薦不代表已啟動任務、已切換模型或已獲額外授權。
 8. **分開判定完成**：plan-complete 表示全案範圍、研究、架構、依賴、風險、驗收和未決問題均可追溯；ready-to-dispatch 另要求該任務的決策已定、契約可讀、依賴及環境就緒、唯一 owner 明確、驗收可執行。下游被上游阻塞時列解除條件，不標 ready。計畫完成不等於授權實作。
 ## 輸出與唯一流程
 
-按需要把產物合併在同一份文件，不為欄位數量建立多份表。大型輸出至少包含 ResearchCoverage、EvidenceLedger、Decision／ContradictionLedger、ArchitecturePlan、DAG、TaskContracts、ModelAssignmentPlan（含研究前完成的 PlannerExecutionCheck 與分開記錄的委派角色推薦）、AcceptanceMatrix、ResumePack；有未定 UI 時增加 DesignBrief，批准後記錄 DesignSpec revision／approval reference 與完整 DesignImplementationMap。輕量輸出只保留任務卡必要欄位，但 UI 任務卡仍須內嵌精簡完整映射，無須另建 DesignImplementationMap 文件。依 [Plan 範本](../large-task-orchestrator/references/plan-template.md) 與 [TaskContract](../large-task-orchestrator/references/task-contract.md) 記錄大型細節；兩者是目前過渡期的共用 canonical references，避免新舊流程維護兩套格式。
+按需要把產物合併在同一份文件，不為欄位數量建立多份表。大型輸出至少包含 ResearchCoverage、EvidenceLedger、Decision／ContradictionLedger、ArchitecturePlan、DAG、TaskContracts、ModelAssignmentPlan（含不阻擋研究的 PlannerExecutionCheck 配置紀錄與分開記錄的委派角色推薦）、AcceptanceMatrix、ResumePack；有未定 UI 時增加 DesignBrief，批准後記錄 DesignSpec revision／approval reference 與完整 DesignImplementationMap。輕量輸出只保留任務卡必要欄位，但 UI 任務卡仍須內嵌精簡完整映射，無須另建 DesignImplementationMap 文件。依 [Plan 範本](../large-task-orchestrator/references/plan-template.md) 與 [TaskContract](../large-task-orchestrator/references/task-contract.md) 記錄大型細節；兩者是目前過渡期的共用 canonical references，避免新舊流程維護兩套格式。
 
 大型 execute 暫由既有 large-task-orchestrator 作為唯一整合入口；若本計畫之後交給它，附上本計畫 revision 與證據範圍，讓它核對新鮮度後沿用，不另開第二位 planner。只要求計畫時不啟動該協調流程。小任務也不因拆解有多個步驟就自動增加代理。完成後交付計畫狀態、ready／blocked 任務、未解決事項與下一個安全步驟。

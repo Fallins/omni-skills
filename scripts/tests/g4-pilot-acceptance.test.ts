@@ -75,7 +75,7 @@ function readerAcceptanceStatus(checks) {
 test('light personal feature and BUG flows retain compact cards and required verification', () => {
   assert.match(understand, /目標使用者與情境/);
   assert.match(planner, /\*\*light\*\*/);
-  assert.match(planner, /此檢查只適用 large/);
+  assert.match(planner, /此紀錄只適用 large/);
   assert.match(planner, /不強制最高模型或最高思考程度/);
   assert.match(planner, /BUG 計畫包含可取得的修復前失敗證據/);
   assert.match(implementer, /輕量工作保留足以避免猜測的短任務卡/);
