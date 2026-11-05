@@ -17,6 +17,10 @@ description: 執行、建立或維護可重跑的功能驗證入口，將驗收�
 - 收據格式見 [VerificationReceipt](references/verification-receipt.md)；產品功能地圖見 [FeatureMap](references/feature-map.md)；若沒有可靠入口，依 [VerificationKit playbook](references/verification-kit.md) 建立或維護。
 - Receipt 記錄驗證結果，不替代實作、review 或發布判定；整體工作狀態依共用 [CompletionDecision](../../docs/contracts/completion-decision.md) 分開回報。
 
+## 證據適用與補驗
+
+逐項核對證據的 acceptance、實際結果、方法、版本／產物及環境與目前要求是否一致，包含資料、帳戶、依賴和必要真實環境。可追溯且適用於同最終 revision（含工作樹差異）或同一確定產物的通過證據可沿用，不必自動重跑；產物相同也須確認環境與驗收範圍適用。跨 revision 不自動沿用：只有記錄具體 diff 與依賴影響分析，足以支持該 acceptance 未受影響時才考慮；不確定就補驗或標 blocked／not-run。修正、整合、環境或依賴改變後，對受影響項、缺失證據及新增整合風險補驗；各切片通過不等於整體流程通過。必要核心流程、權限、資料安全、重要回歸與專案強制 gate 不降級；指定真實資料庫、瀏覽器或 NAS 時，不以 mock 或較弱測試替代。保存沿用理由、證據來源、適用範圍與缺口，依 CompletionDecision 判定是否完成。
+
 ## Run
 
 沿已存在且有效的專案入口驗收指定版本。先執行 Doctor 類唯讀檢查確認實例、版本、服務、埠、帳戶與資料前提；不符就停止 Drive，避免操作錯誤或他人的環境。從使用者入口跑 acceptance，檢查畫面／API、資料副作用和錯誤恢復是否一致，並保留清理後仍可讀的證據。若契約涉及背景程序、lease、持久 I/O 或外部儲存，依 acceptance 分別驗證實際程序生命週期、I/O drain、lease 到期／釋放、隔離 DB 與必要 NAS gate；合成 DB、artifact 或 mock 不能代替另一個指定的真實環境 gate，環境不可用就標 blocked。

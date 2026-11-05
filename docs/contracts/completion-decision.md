@@ -18,6 +18,7 @@ release_status: published | not-published | blocked | not-requested
 - `scope_result=complete` 只代表本次已批准 scope 的必要交付完成，不代表全產品、跨票整合或 release gate 都完成。
 - `implementation_status` 只由實際程式差異支持；沒有改程式時填 `not-started` 或不適用，不借用 test exit code。
 - `verification_status=complete` 要求必要 acceptance 都有適用的通過證據；部分覆蓋用 `partial`，必要檢查無法執行用 `blocked` 或 `not-run`。
+- 依 verify-change 核對並記錄證據對最終 revision／產物、acceptance 與環境的適用性；有效證據可沿用，跨 revision 須有具體差異及依賴影響分析。受影響、缺失及新增整合風險須補驗，必要 gate 不降級。最終整合 owner 負責完整判定，無須親自重跑所有有效檢查。
 - `review_status=reviewable` 表示固定 revision 的審查材料可用且所需 review 完成；若有 blocking finding，填 `changes-requested`。審查獨立性另照實標記。
 - `release_status=published` 需要目標環境的發布證據；commit、build、測試、merge 或可 review 都不等於發布。未要求發布填 `not-requested`。
 - `accepted_exceptions` 只連到有權決策者的真實紀錄；不得自我批准、刪除安全底線或把 unknown 寫成 accepted。

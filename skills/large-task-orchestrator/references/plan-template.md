@@ -64,7 +64,7 @@ Risk spike S-ID：
 
 狀態可用：planned → ready → running → implemented → spec-reviewed → code-reviewed → integrated → verified。blocked / partial 保留原因；修正或 rebase 後受影響的審查與測試需重新評估。
 
-完成矩陣將 R-ID 對應至實作任務、spec review、code review、主代理親自執行的最終完整驗收與剩餘缺口。記錄實作者與審查者，兩者相同時標 self-review；若使用者要求獨立審查，該要求未滿足或未經明確調整時不得宣稱完整完成。最後驗收涵蓋全部需求及相關正常、邊界、錯誤與整合情境，而不只是抽查子代理回報。記錄最終 commit／工作樹標識及測試環境，避免拿舊版本通過紀錄證明新修改。不能執行的必要驗證保留為未通過／待驗證，不以子代理自行驗收替代。
+完成矩陣將 R-ID 對應至實作任務、spec／code review、必要正常／邊界／錯誤／整合驗收、適用證據及剩餘缺口；記錄最終 commit／工作樹或產物標識、環境、證據來源與適用性判斷。主代理負責完整判定，依 verify-change 沿用有效證據並補驗受影響項、缺口與新增整合風險，不必重跑全部。跨 revision 沿用須有具體差異與依賴影響分析。記錄實作者與審查者，相同時標 self-review；使用者、團隊或專案要求獨立審查時未滿足不得宣稱完整完成。必要驗證無法執行就保留 blocked／not-run；分支自行通過不等於整合通過，強制 gate 不降級。完成判定沿用 CompletionDecision。
 
 ## 6. Resume / replan context pack
 

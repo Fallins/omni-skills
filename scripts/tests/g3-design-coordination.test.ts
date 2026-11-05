@@ -12,6 +12,10 @@ const planner = read('../../skills/plan-change/SKILL.md');
 const coordinator = read('../../skills/coordinate-work/SKILL.md');
 const lifecycle = read('../../skills/coordinate-work/references/coordination-lifecycle.md');
 const lto = read('../../skills/large-task-orchestrator/SKILL.md');
+const verify = read('../../skills/verify-change/SKILL.md');
+const review = read('../../skills/review-change/SKILL.md');
+const completion = read('../../docs/contracts/completion-decision.md');
+const planTemplate = read('../../skills/large-task-orchestrator/references/plan-template.md');
 const adapter = read('../../docs/examples/synthetic-company-adapter.md');
 const readmeZh = read('../../README.md');
 const readmeEn = read('../../README.en.md');
@@ -184,7 +188,9 @@ test('coordinate-work preserves a single owner, confirmed stop, and final integr
   assert.match(coordinator, /If `large-task-orchestrator` \(LTO\) is active, LTO remains the only coordinator/);
   assert.match(coordinator, /confirmed stopped/);
   assert.match(coordinator, /in-flight I\/O is drained/);
-  assert.match(coordinator, /personally performs final whole-scope acceptance/);
+  assert.match(coordinator, /coordinator is accountable for final whole-scope acceptance/);
+  assert.match(coordinator, /does not require personally rerunning all tests/);
+  assert.doesNotMatch(coordinator, /personally performs final whole-scope acceptance/);
   assert.match(lifecycle, /one source of truth/);
   assert.match(lifecycle, /stop cannot be confirmed/);
   assert.match(lifecycle, /final integrated revision/);
@@ -213,4 +219,40 @@ test('coordinate-work preserves a single owner, confirmed stop, and final integr
   assert.equal(finalAcceptanceReady({ activeCoordinator: 'LTO', integratedRevision: 'merge-r2', acceptedRevision: 'merge-r2', acceptanceRef: 'acceptance-v2', allTasksComplete: false }), false);
   assert.equal(finalAcceptanceReady({ activeCoordinator: 'LTO', integratedRevision: 'merge-r2', acceptedRevision: 'merge-r1', acceptanceRef: 'acceptance-v2', allTasksComplete: true }), false);
   assert.equal(finalAcceptanceReady({ activeCoordinator: 'LTO', integratedRevision: 'merge-r2', acceptedRevision: 'merge-r2', acceptanceRef: 'acceptance-v2', allTasksComplete: true }), true);
+});
+
+test('acceptance and review contracts preserve coverage, applicable evidence, and required gates', () => {
+  assert.match(lto, /逐項確認全部必要需求/);
+  assert.match(lto, /缺失證據與新增整合風險補驗/);
+  assert.match(lto, /不要求主代理親自重跑全部/);
+  assert.match(lto, /要求獨立審查時必須滿足/);
+  assert.doesNotMatch(lto, /必須親自重新做完整最終驗收|兩輪審查及主代理完整最終驗收/);
+  assert.match(verify, /跨 revision 不自動沿用/);
+  assert.match(verify, /具體 diff 與依賴影響分析/);
+  assert.match(verify, /不以 mock 或較弱測試替代/);
+  assert.match(review, /一份報告涵蓋兩軸/);
+  assert.match(review, /明確要求獨立審查時仍須滿足/);
+  assert.match(completion, /必要 gate 不降級/);
+  assert.match(planTemplate, /必要驗證無法執行就保留 blocked／not-run/);
+});
+
+// Illustrative acceptance decisions; these fixtures test the stated rules, not actual agent behavior.
+function acceptanceDecision({ required, receipts, revision, artifact, environment, independentRequired, independentDone }) {
+  const missing = required.filter((id) => !receipts.some((r) =>
+    r.id === id && r.passed && r.environment === environment &&
+    (r.revision === revision || (artifact && r.artifact === artifact) || r.unaffectedByDocumentedDiff === true)));
+  return { missing, complete: missing.length === 0 && (!independentRequired || independentDone) };
+}
+
+test('synthetic decisions reuse applicable evidence but block missing acceptance, integration and independent review', () => {
+  const input = { required: ['unit', 'integration'], revision: 'r2', artifact: 'build2', environment: 'real', independentRequired: false, independentDone: false,
+    receipts: [{ id: 'unit', revision: 'r2', environment: 'real', passed: true }, { id: 'integration', revision: 'r2', environment: 'real', passed: true }] };
+  assert.deepEqual(acceptanceDecision(input), { missing: [], complete: true });
+  assert.deepEqual(acceptanceDecision({ ...input, receipts: input.receipts.slice(0, 1) }), { missing: ['integration'], complete: false });
+  assert.equal(acceptanceDecision({ ...input, required: [...input.required, 'new-integration-risk'] }).complete, false);
+  assert.equal(acceptanceDecision({ ...input, independentRequired: true }).complete, false);
+  assert.equal(acceptanceDecision({ ...input, independentRequired: true, independentDone: true }).complete, true);
+  assert.equal(acceptanceDecision({ ...input, receipts: input.receipts.map((r) => ({ ...r, revision: 'r1' })) }).complete, false);
+  assert.equal(acceptanceDecision({ ...input, receipts: input.receipts.map((r) => ({ ...r, revision: 'r1', unaffectedByDocumentedDiff: true })) }).complete, true);
+  assert.equal(acceptanceDecision({ ...input, receipts: input.receipts.map((r) => ({ ...r, environment: 'mock' })) }).complete, false);
 });

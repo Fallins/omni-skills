@@ -19,6 +19,8 @@ description: 依固定 revision 審查程式變更是否符合需求、規範與
 1. **Spec compliance**：逐項比對需求／contract／設計與實際變更，檢查必要狀態、負向流程、資料副作用和未授權行為。指出缺少 acceptance 對應或與批准版本不一致之處。
 2. **Code quality**：檢查正確性、錯誤處理、相容性、安全／權限、資料完整性、競態、可維護性和 regression。只把會造成可說明影響的問題列為 finding；個人風格偏好不當 blocker。
 
+一般可用同一固定 revision 的一份報告涵蓋兩軸，不自動要求兩輪或第二人；使用者、團隊或專案明確要求獨立審查時仍須滿足，未滿足列為缺口。低風險非阻塞問題集中列管，不因每項小修重啟整案；修正後依變更影響複查，而非自動重審全部。
+
 對背景 worker、lease、持久寫入或外部儲存，逐項核對在途 I/O、lease owner／到期、drain／停機、冪等恢復與 rollback acceptance，以及對應環境證據；單一 finding 修好不代表其他 gate 通過。每個 finding 依 [ReviewFinding contract](references/review-finding.md) 記錄位置、條件、影響、證據、修正方向和回歸驗收。`evidence_type` 必須為：
 
 - `confirmed-static`：可由固定程式差異與契約證明。
