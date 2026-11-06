@@ -46,6 +46,12 @@ description: 大型程式任務的證據查核、可行性分析、細粒度規�
 
 每個實作切片可沿用 [implement-change](../implement-change/SKILL.md) 的新功能／BUG／重構及設計到程式 playbook；驗證沿用 [verify-change](../verify-change/SKILL.md) 並保存 VerificationReceipt；規格符合與程式風險審查沿用 [review-change](../review-change/SKILL.md)。[coordinate-work](../coordinate-work/SKILL.md) 是可重用的生命週期方法，不是第二個整案協調入口：本技能仍是唯一 coordinator，保留停止／移交、writer ownership、review 排程與主代理最終整合驗收，不再啟動重複 DAG、任務台帳或派工流程。設計批准後回 Plan 更新 DesignImplementationMap 與 TaskContract，再按版次實作；不得略過使用者審核直接從原型寫程式。
 
+切片執行入口結束、等待使用者、建立 MR，或回報該切片完成，都不是整批完成。協調者收回結果後核對實際變更、版本、需求範圍、必要測試與既有證據，再安排 verify-change，並用該證據做 review-change。未完成或無法執行的驗證標 blocked 或未驗證，寫明影響，不宣稱完成。先有可用的驗證證據，再用該證據審查需求符合與程式風險。執行入口本身不會交回控制權時，仍以切片回報為起點繼續這兩步和整合判定，紀錄完成前不把該切片當成批次完成。
+
+專案執行入口若要求在 commit、push、MR 或其他步驟等待確認，保留該等待點與既有授權邊界。尚未獲批准時停在等待並回報，不自動 push 或送 MR，也不把未批准的操作當成內部步驟。先驗證再開 MR，或先建立 draft MR 再完成其餘檢查，依專案規則、可執行順序與使用者授權。部分驗證必須在 MR 之後時，明列尚未完成的項目與後續責任。已開 MR 不是驗收通過。
+
+browser、真實服務或指定裝置不可用時，標未驗證與影響，保留已取得的其他證據，不宣稱全數通過。UI 可見行為不以 typecheck 或文字搜尋代替。全部可執行切片都返回並完成適用驗證與審查後，才做下面的最終整合判定。
+
 1. 每次分派給子代理完整 task contract、必要來源與 repo 指引、base revision、相關使用者指示，以及回報格式；不要假設它能看到父代理對話。主代理持續維護唯一任務台帳與 ownership 表。
 2. 子代理只修改自己負責範圍。發現接口不成立、需要越界寫入或依賴改變時，停止受影響寫入並回報，不能自行擴張範圍。合約改版、取消或更換 owner 時，由主代理依序執行：
    - 列出受影響 writer 與下游，停止新派工與成果整合，要求停筆；必要時使用宿主提供的中斷機制。
@@ -58,7 +64,7 @@ description: 大型程式任務的證據查核、可行性分析、細粒度規�
 
 ## 5. 完成或接續
 
-- 只有全部必要需求、適用的驗收證據及所需審查均有可檢查的結果，主代理才可依 [CompletionDecision](../../docs/contracts/completion-decision.md) 判定相應範圍完成。明列未完成、未測試、已知風險與需要使用者決策的事項；blocked / partial 不能改稱 done。
+- 只有全部必要需求、適用的驗收證據及所需審查均有可檢查的結果，主代理才可依 [CompletionDecision](../../docs/contracts/completion-decision.md) 判定相應範圍完成。明列未完成、未測試、已知風險與需要使用者決策的事項；blocked / partial 不能改稱 done。交付列出每個需求或 MR、完成項、待驗項、未解決問題、適用版本與下一步。代理回報、commit、MR 或 exit 0 不能單獨當作完整驗收。
 - commit、build 或測試通過不是部署證據。若本輪包含部署，另核實授權目標環境的實際版本與行為；沒有證據時只報告程式碼／測試狀態。
 - 中斷、上下文不足或計畫變更時，更新 plan 中的 resume context pack：目標與授權、版本、已完成成果、正在執行的 owner／狀態、尚未解決的決策及下一個安全動作。恢復時先核對真實工作樹、代理與測試狀態，不以舊摘要直接重做或覆寫他人的變更。
 - 計畫交付包含查核結論、矛盾與風險、DAG 與 task contracts；執行交付另外包含變更摘要、實際測試證據及剩餘事項。規劃完成與實作完成分開報告。
