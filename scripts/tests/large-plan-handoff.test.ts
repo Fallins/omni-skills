@@ -77,9 +77,15 @@ function afterPlan(input) {
 }
 
 function sliceReturned(event) {
-  if (!event.verifyReceipt) return { batchComplete: false, next: 'verify-change' };
-  if (!event.review) return { batchComplete: false, next: 'review-change' };
-  return { batchComplete: false, next: 'wait-for-remaining-slices' };
+  if (event.kind === 'awaiting-confirmation' && !event.verifiableChange) {
+    return { batchComplete: false, next: 'record-wait', startAcceptance: false, continueIndependent: true };
+  }
+  if (event.kind === 'post-mr-check' && !event.mrReady) {
+    return { batchComplete: false, next: 'hold-until-mr', startAcceptance: false };
+  }
+  if (!event.verifyReceipt) return { batchComplete: false, next: 'verify-change', startAcceptance: true };
+  if (!event.review) return { batchComplete: false, next: 'review-change', startAcceptance: true };
+  return { batchComplete: false, next: 'wait-for-remaining-slices', startAcceptance: false };
 }
 
 function projectWait(input) {
@@ -181,8 +187,21 @@ test('a draft MR returns to the coordinator instead of completing the batch', ()
   const reviewed = sliceReturned({ kind: 'done', verifyReceipt: 'receipt-1', review: 'self-review' });
   assert.equal(reviewed.batchComplete, false);
   assert.match(orchestrator, /建立 MR，或回報該切片完成，都不是整批完成/);
+  assert.match(orchestrator, /尚未產生可驗證的變更時，不啟動它的完成驗收/);
   assert.match(orchestrator, /先有可用的驗證證據，再用該證據審查/);
   assert.match(orchestrator, /代理回報、commit、MR 或 exit 0 不能單獨當作完整驗收/);
+});
+
+test('waiting before implementation is not treated as ready for acceptance', () => {
+  const waiting = sliceReturned({ kind: 'awaiting-confirmation', verifiableChange: false });
+  assert.equal(waiting.startAcceptance, false);
+  assert.equal(waiting.next, 'record-wait');
+  assert.equal(waiting.continueIndependent, true);
+  assert.equal(waiting.batchComplete, false);
+  const held = sliceReturned({ kind: 'post-mr-check', mrReady: false });
+  assert.equal(held.startAcceptance, false);
+  assert.equal(held.next, 'hold-until-mr');
+  assert.match(orchestrator, /必須在 MR 建立且條件具備後才能做的檢查：維持未完成，不提前啟動/);
 });
 
 test('a required project wait is preserved, and approval does not add another gate', () => {
