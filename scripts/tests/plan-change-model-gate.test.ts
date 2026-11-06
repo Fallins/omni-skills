@@ -96,3 +96,83 @@ test('light planning stays exempt from the large configuration record', () => {
   assert.match(planChange, /Light.*不強制最高模型或最高思考程度/);
   assert.match(planTemplate, /Light 標 not applicable/);
 });
+
+test('selectable hosts prefer a capable lower-cost model for bounded implementation', () => {
+  for (const document of [planChange, orchestrator, planTemplate, taskContract]) {
+    assert.match(document, /需求明確、範圍可界定、驗收具體/);
+    assert.match(document, /能力足夠且成本較低|能力足夠、成本較低/);
+    assert.match(document, /有條件的預設/);
+  }
+  assert.match(planChange, /主動評估並優先考慮能力足夠且成本較低的模型，或適當的較低思考程度/);
+  assert.match(planChange, /不是強制所有實作降階/);
+  assert.match(orchestrator, /先考量適任、工具能力與完成品質，再比較成本與返工風險/);
+  assert.match(taskContract, /先看適任、工具能力與完成品質，再比較成本與返工風險/);
+});
+
+test('high-risk work is not downgraded because the slice looks small', () => {
+  for (const document of [planChange, orchestrator, planTemplate, taskContract]) {
+    assert.match(document, /權限、資料安全、migration、並發、跨 repo 契約、重要架構或高度不確定/);
+    assert.match(document, /不得只因任務看起來小就降階|不得只因看起來小就降階|不得只因範圍小就降階/);
+    assert.match(document, /較低階模型不保證便宜/);
+    assert.match(document, /不寫死模型品牌、等級或價格排名|不寫死品牌、等級或價格排名/);
+  }
+});
+
+test('delegation without model selection does not claim a cost reduction', () => {
+  for (const document of [planChange, orchestrator]) {
+    assert.match(document, /可派子代理但不能指定模型或思考程度/);
+    assert.match(document, /不宣稱成本已降低/);
+    assert.match(document, /可能繼承或使用的設定/);
+  }
+  assert.match(planTemplate, /情境 B 不宣稱成本已降低/);
+  assert.match(taskContract, /情境 B 不宣稱成本已降低/);
+});
+
+test('missing subagents stay on the main agent without skipping verification', () => {
+  for (const document of [planChange, orchestrator]) {
+    assert.match(document, /沒有可用子代理，或工具／名額不足/);
+    assert.match(document, /由目前主代理按相同(任務範圍| TaskContract 與任務範圍)循序完成/);
+    assert.match(document, /無法採用模型分工/);
+    assert.match(document, /不因此擴大權限、略過驗證或宣稱獨立審查/);
+  }
+  assert.match(planTemplate, /C 沒有可用子代理而由主代理循序完成/);
+  assert.match(taskContract, /情境 C 由主代理循序完成/);
+});
+
+test('required model or independent review is not claimed when the host cannot provide it', () => {
+  for (const document of [planChange, orchestrator]) {
+    assert.match(document, /特定模型訂為必要條件而無法達成時，暫停受影響部分並回報/);
+    assert.match(document, /明確要求必須委派或指定執行者而無法滿足時，停下受影響部分並回報/);
+  }
+  assert.match(planChange, /要求獨立審查而無法滿足時，保留缺口，不假稱已滿足/);
+  assert.match(orchestrator, /不能僅以模型階級推定審查品質或獨立性/);
+  assert.match(orchestrator, /要求獨立審查時必須滿足，否則保留缺口，不得自行放寬或假稱已滿足/);
+  assert.match(taskContract, /不能僅以模型階級推定審查品質或獨立性/);
+  assert.match(taskContract, /self-review/);
+  assert.match(taskContract, /要求獨立審查而無法滿足時，不假稱已滿足/);
+});
+
+test('accepted tool settings are not observed execution, price, or a successful launch', () => {
+  for (const document of [planChange, orchestrator, planTemplate]) {
+    assert.match(document, /能建立任務但無法確認實際模型、價格或是否成功啟動/);
+    assert.match(document, /不憑預設值或 tool-accepted 宣稱成功/);
+    assert.match(document, /不重複啟動可能已成功的任務/);
+    assert.match(document, /不編造節省/);
+  }
+  assert.match(taskContract, /情境 D 的 tool-accepted 不是 observed/);
+  assert.match(taskContract, /成本未知不編造節省/);
+  assert.match(planTemplate, /tool-accepted 不是 observed/);
+});
+
+test('model recommendations do not authorize extra work and light tasks are not forced to delegate', () => {
+  assert.match(planChange, /推薦不代表已啟動任務、已切換模型、已降低成本或已獲額外額度、外部任務或其他動作的授權/);
+  assert.match(planChange, /不為每次能力檢查另設重複確認關卡/);
+  assert.match(planChange, /小任務不因本節強制開子代理或升級成 large/);
+  assert.match(planChange, /模型分工不要求 light 開子代理或改成 large/);
+  assert.match(orchestrator, /不因模型分工把小型工作升級成大型任務/);
+  assert.match(orchestrator, /推薦不是取得額外額度、啟動外部任務或其他動作的授權/);
+  assert.match(planChange, /先說明問題並保存成果/);
+  assert.match(planChange, /可升級模型、調整拆分，或交回主代理/);
+  assert.match(orchestrator, /沒有新證據不重複相同失敗/);
+  assert.match(orchestrator, /不把同一低價嘗試無限重跑/);
+});

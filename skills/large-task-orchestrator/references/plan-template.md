@@ -7,10 +7,10 @@
 - Outcome：本輪要達成的結果；plan-only 或 plan-and-execute，附使用者依據。
 - Scope / non-goals：哪些屬於本輪，哪些不屬於。
 - Repo / revision：實際路徑、base commit、branch、工作樹修改與適用 repo 指引。
-- Capabilities：可用的讀寫／測試／委派工具、並行限制、隔離方案與權限阻礙；執行方式為 delegation、primary-sequential 或 plan-only，記錄選擇依據及使用者是否要求指定代理／模型。
+- Capabilities：可用的讀寫／測試／委派工具、並行限制、隔離方案與權限阻礙；執行方式為 delegation、primary-sequential 或 plan-only，記錄選擇依據及使用者是否要求指定代理／模型。委派能力另標一種，不混寫：A 可指定模型／思考程度、B 可派子代理但不能指定模型或思考程度、C 沒有可用子代理而由主代理循序完成、D 能建立任務但無法確認實際模型、價格或是否成功啟動。工具接受的設定不是 observed；成本沒有資料標未知。這筆記錄不擴大授權，也不代表任務已啟動。
 - Dependency readiness：每個必要套件、服務、工具與 credential 設定的版本／API 相容性、目標環境、owner、available / missing / unknown、查驗方法與證據、所需權限或使用者步驟。credential 只記名稱與狀態，絕不記錄秘密值；建立／配置持續存取依宿主要求另取得確認。
 - PlannerExecutionCheck（large only，配置紀錄，不阻擋研究）：主規劃 agent 直接沿用使用者在目前 session UI 選定的模型與 effort，不自動切換或要求最高配置。不為此紀錄詢問精確型號、可用上限或 Ultra 額外許可。宿主已有可觀察值或使用者主動提供時，可記 selected model／effort、`UI evidence source`、active session 範圍與 `observed at`；這是 UI 選定值，不是 provider-side execution 證明。設定檔預設值、舊 session、提示詞、子任務推薦或工具接受設定不可冒充觀察證據。不可觀測時記 unknown／not observable；可用上限無須另查，不因此阻塞、要求 fallback 或標 provisional。既有 Plan 不因缺少此配置證據而需要重規劃或失去 ready 狀態。這不授權另行啟動或委派任務，也不擴大 plan-only／execute 範圍。Light 標 not applicable。
-- SubtaskModelAssignments：針對委派角色與子任務列適任能力、推薦模型／思考程度、理由、可接受替代、成本假設及升級條件。監管／整合 writer 推薦以任務所需的規劃／整合能力為基準，同級或略低一階，不以主規劃 UI 選定型號／effort 代替能力需求；子任務先看適任，再比較 CP 值。正式委派前查當下可用模型與支援設定，不寫固定偏好或過時品牌排名。每項分開記錄 recommended、requested、tool-accepted、observed；工具不能設定或核實時說明限制，不宣稱已切換。沒有委派任務就標 not applicable。
+- SubtaskModelAssignments：針對委派角色與子任務列適任能力、推薦模型／思考程度、理由、可接受替代、成本假設及升級條件。監管／整合 writer 推薦以任務所需的規劃／整合能力為基準，同級或略低一階，不以主規劃 UI 選定型號／effort 代替能力需求；子任務先看適任，再比較 CP 值。宿主屬於情境 A，且需求明確、範圍可界定、驗收具體時，主動評估並優先考慮能力足夠且成本較低的模型或適當的較低思考程度；這是有條件的預設。權限、資料安全、migration、並發、跨 repo 契約、重要架構或高度不確定的工作不得只因看起來小就降階。較低階模型不保證便宜或勝任，不寫死品牌、等級或價格排名。情境 B 不宣稱成本已降低；情境 C 由主代理循序完成，除非使用者要求必須委派；情境 D 不憑預設值或 tool-accepted 宣稱成功，也不把該值寫成 observed。正式委派前查當下可用模型與支援設定，不寫固定偏好或過時品牌排名。每項分開記錄 recommended、requested、tool-accepted、observed；工具不能設定或核實時說明限制，不宣稱已切換。沒有委派任務就標 not applicable。推薦不是額外額度或外部任務的授權。卡住時保存成果，再依授權與宿主能力升級、調整拆分或交回主代理，並遵守重試上限。
 - Open startup questions：缺少且影響本輪決策的資訊。主規劃沿用 UI 選定配置，不詢問精確型號、可用上限或 Ultra 額外許可，不把配置不可觀測當作啟動問題。子任務模型與必要許可只在準備委派時，依使用者授權與宿主規則確認；既有確認不重問，未回覆不視為同意。
 
 ## 2. 需求與來源查核
@@ -60,7 +60,7 @@ Risk spike S-ID：
 
 ## 5. 執行台帳與整合驗收
 
-每項任務記錄 owner、模型／effort 的可觀察設定（不可觀測則記 unknown，不冒充已核實）、狀態、base revision、合約版本、交付產物、測試證據、審查問題、重試次數及下一步。改版／移交另記 stop-requested 與 stop-confirmed、代理及工具停止寫入的證據、保存的 diff／產物、新版確認及 ownership 移交；無法確認停止時維持 blocked。晚到舊版成果標 stale，記錄是否經新版核對後採用。
+每項任務記錄 owner、模型／effort 的可觀察設定（不可觀測則記 unknown，不冒充已核實；tool-accepted 不是 observed）、狀態、base revision、合約版本、交付產物、測試證據、審查問題、重試次數及下一步。成本沒有資料標未知，不編造節省。啟動結果不明時先核對，不重複啟動可能已成功的任務。改版／移交另記 stop-requested 與 stop-confirmed、代理及工具停止寫入的證據、保存的 diff／產物、新版確認及 ownership 移交；無法確認停止時維持 blocked。晚到舊版成果標 stale，記錄是否經新版核對後採用。
 
 狀態可用：planned → ready → running → implemented → spec-reviewed → code-reviewed → integrated → verified。blocked / partial 保留原因；修正或 rebase 後受影響的審查與測試需重新評估。
 
