@@ -14,7 +14,7 @@ description: 執行、建立或維護可重跑的功能驗證入口，將驗收�
 - 建立 acceptance-to-check 對照，分開記錄靜態、單元、整合、artifact、瀏覽器及必要實體環境檢查。Mock、HTTP 200、process exit 0 或服務存活不能單獨證明語意成功。
 - 每個結果記錄可追溯的命令／動作、執行位置、版本、環境、可觀察結果及資料／檔案／事件副作用。credential 只記設定名稱和狀態，不記秘密值。
 - 每項標記 `passed`、`failed`、`blocked` 或 `not-run`。必要環境或權限缺少就揭露 blocker，不把跳過、mock 或推測計為通過。
-- 收據格式見 [VerificationReceipt](references/verification-receipt.md)；產品功能地圖見 [FeatureMap](references/feature-map.md)；若沒有可靠入口，依 [VerificationKit playbook](references/verification-kit.md) 建立或維護。
+- 收據格式見 [VerificationReceipt](references/verification-receipt.md)；產品功能地圖的欄位見 [FeatureMap](references/feature-map.md)，查找既有地圖時參考 [FeatureMap 位置與歸屬](../feature-map/references/storage.md)；若沒有可靠入口，依 [VerificationKit playbook](references/verification-kit.md) 建立或維護。
 - Receipt 記錄驗證結果，不替代實作、review 或發布判定；整體工作狀態依共用 [CompletionDecision](../../docs/contracts/completion-decision.md) 分開回報。
 
 ## 證據適用與補驗

@@ -98,6 +98,8 @@ G1 新增的路由草案在 [docs/skill-routing-rule-draft.md](docs/skill-routin
 | plan-change | 為程式變更建立可驗證計畫，提供 light／large 模式；large 直接沿用主規劃 session 的 UI 模型／effort，配置不可觀測不阻擋研究，並可明定在途 I/O、lease、停機與回退契約。計畫摘要按複雜度展開，交付後寫明下一步。有界實作切片在可選模型且授權允許時，優先考慮能力足夠、成本較低的執行者；宿主能力分 A–D 如實記錄 | 只要求計畫時用 plan-change；大型 execute 由 large-task-orchestrator 作唯一整合入口。子任務模型推薦另行記錄，不另建第二套分工。 |
 | design-interface | 將 Plan 的 DesignBrief 轉成有 journey、狀態、responsive 規則及分開 UX／Layout acceptance 的 DesignSpec | `/design-interface`；交付指定 revision 給使用者審核；批准後返回 Plan 建實作對照，不直接寫產品程式。 |
 | implement-change | 依已批准契約實作新功能、修復 BUG 或重構，交付 ready-for-verification 變更 | `/implement-change`；大型任務由唯一整合者分配切片，不另建協調流程。 |
+| feature-map | 獨立查找、建立或更新產品功能地圖，保留穩定 ID、來源與驗證證據 | `/feature-map` 或「盤點指定功能並整理成 FeatureMap」；可選 Agent Work 或產品 `docs/feature-map/`。 |
+| ui-ux-audit | 稽核既有 UI 一致性和 UX 任務，依專案與裝置調整，交付有證據的報告 | `/ui-ux-audit` 或「只檢查這個流程的 UI／UX」；找不到適用地圖時同 session 做暫時盤點，不改產品。 |
 | verify-change | 執行 run、建立 bootstrap、維護 maintain 驗證入口與 FeatureMap，產出綁定版本／環境的 VerificationReceipt | `/verify-change`；按需求選 run、bootstrap 或 maintain；後端依賴可分別驗收真程序、隔離 DB 與必要 NAS。不能以 exit 0 取代語意證據。 |
 | review-change | 依固定 revision 做需求符合與程式風險審查，輸出去重、可追溯 findings | `/review-change`；實作者自查須標 self-review。 |
 | coordinate-work | 使用單一 owner、TaskContract、資源／writer 控制、在途 I/O／lease 停止交接、恢復與最終整合驗收來協調多切片工作 | `/coordinate-work` 僅在明確指定且沒有既有 owner 時作為協調者；large-task-orchestrator 已接手時只引用方法，不開第二套 DAG／台帳／派工。 |
